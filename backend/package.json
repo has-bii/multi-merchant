@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.12.19"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.4",
+    "tsx": "^4.22.0",
+    "typescript": "^5.9.3"
+  }
+}
