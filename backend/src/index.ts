@@ -1,14 +1,34 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
+import authRoutes from "./auth/routes.js";
 
-const app = new Hono();
+type Env = {
+  Bindings: {
+    DATABASE_URL: string;
+    BETTER_AUTH_SECRET: string;
+    BETTER_AUTH_URL: string;
+  };
+};
 
-const welcomeStrings = [
-  "Hello Hono!",
-  "To learn more about Hono on Vercel, visit https://vercel.com/docs/frameworks/backend/hono",
-];
+const app = new Hono<Env>();
 
-app.get("/", (c) => {
-  return c.text(welcomeStrings.join("\n\n"));
-});
+// CORS — adjust origin for production
+app.use(
+  "/api/*",
+  cors({
+    origin: ["http://localhost:3001"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
+// Health check
+app.get("/", (c) => c.json({ status: "ok" }));
+
+// Auth routes — /api/auth/*
+app.route("/api/auth", authRoutes);
 
 export default app;

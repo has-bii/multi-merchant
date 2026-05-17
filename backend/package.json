@@ -2,11 +2,24 @@
   "name": "backend",
   "type": "module",
   "dependencies": {
-    "hono": "^4.12.19"
+    "@better-auth/drizzle-adapter": "^1.6.11",
+    "@hono/zod-validator": "^0.8.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "better-auth": "^1.6.11",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.12.19",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^24.12.4",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.22.0",
     "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   }
 }
