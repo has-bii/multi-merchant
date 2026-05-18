@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "app",
   "private": true,
   "type": "module",
   "imports": {
