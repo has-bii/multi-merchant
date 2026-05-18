@@ -1,16 +1,6 @@
-import { neon } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-http"
 import { Hono } from "hono"
 
-import { productHets } from "../db/schema.js"
-
-const sql = neon(process.env.DATABASE_URL!)
-const db = drizzle({
-  client: sql,
-  schema: {
-    productHets,
-  },
-})
+import { db } from "../lib/db.js"
 
 const route = new Hono()
 
