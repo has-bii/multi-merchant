@@ -23,7 +23,7 @@ export const env: Env = {
     URL: process.env.DATABASE_URL!,
   },
   CORS: {
-    ORIGIN_ADMIN: process.env.CORS_ORIGIN_ADMIN!,
-    ORIGIN_CLIENT: process.env.CORS_ORIGIN_CLIENT!,
+    ORIGIN_ADMIN: process.env.ORIGIN_ADMIN!,
+    ORIGIN_CLIENT: process.env.ORIGIN_CLIENT!,
   },
 }
