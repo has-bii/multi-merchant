@@ -5,6 +5,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input"
 
 import { useLoginForm } from "../hooks/use-login-form"
+import { Link } from "@tanstack/react-router"
 
 export function LoginForm() {
   const { form, error } = useLoginForm()
@@ -90,9 +91,12 @@ export function LoginForm() {
               )}
             />
 
-            <a href="/forgot-password" className="text-sm text-muted-foreground hover:text-primary text-center">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-muted-foreground hover:text-primary text-center"
+            >
               Lupa Password?
-            </a>
+            </Link>
           </FieldGroup>
         </form>
       </CardContent>
