@@ -85,7 +85,7 @@ export function LoginForm() {
               ]}
               children={([canSubmit, isDirty, isSubmitting]) => (
                 <Button type="submit" disabled={!canSubmit || !isDirty || isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Submit"}
+                  {isSubmitting ? "Loading..." : "Masuk"}
                 </Button>
               )}
             />
