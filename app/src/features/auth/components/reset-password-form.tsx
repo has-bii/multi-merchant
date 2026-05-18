@@ -4,16 +4,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-import { useLoginForm } from "../hooks/use-login-form"
+import { useResetPasswordForm } from "../hooks/use-reset-password-form"
 
-export function LoginForm() {
-  const { form, error } = useLoginForm()
+export function ResetPasswordForm({ token }: { token: string }) {
+  const { form, error, success } = useResetPasswordForm(token)
+
+  if (success) {
+    return (
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle>Password Berhasil Direset</CardTitle>
+          <CardDescription>
+            Password Anda telah berhasil diubah. Silakan masuk dengan password baru.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button className="w-full" asChild>
+            <a href="/login">Masuk</a>
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle>Masuk</CardTitle>
-        <CardDescription>Masuk ke akun Anda untuk melanjutkan.</CardDescription>
+        <CardTitle>Reset Password</CardTitle>
+        <CardDescription>Masukkan password baru Anda.</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -25,33 +43,10 @@ export function LoginForm() {
           <FieldGroup>
             {error && (
               <Alert variant="destructive">
-                <AlertTitle>Gagal Masuk</AlertTitle>
+                <AlertTitle>Gagal Mereset</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-
-            <form.Field
-              name="email"
-              children={(field) => {
-                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="email@gmail.com"
-                      autoComplete="off"
-                    />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                  </Field>
-                )
-              }}
-            />
 
             <form.Field
               name="password"
@@ -59,7 +54,7 @@ export function LoginForm() {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Password Baru</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -69,7 +64,31 @@ export function LoginForm() {
                       aria-invalid={isInvalid}
                       type="password"
                       placeholder="********"
-                      autoComplete="off"
+                      autoComplete="new-password"
+                    />
+                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                  </Field>
+                )
+              }}
+            />
+
+            <form.Field
+              name="confirmPassword"
+              children={(field) => {
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Konfirmasi Password</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      type="password"
+                      placeholder="********"
+                      autoComplete="new-password"
                     />
                     {isInvalid && <FieldError errors={field.state.meta.errors} />}
                   </Field>
@@ -85,14 +104,10 @@ export function LoginForm() {
               ]}
               children={([canSubmit, isDirty, isSubmitting]) => (
                 <Button type="submit" disabled={!canSubmit || !isDirty || isSubmitting}>
-                  {isSubmitting ? "Loading..." : "Masuk"}
+                  {isSubmitting ? "Loading..." : "Reset Password"}
                 </Button>
               )}
             />
-
-            <a href="/forgot-password" className="text-sm text-muted-foreground hover:text-primary text-center">
-              Lupa Password?
-            </a>
           </FieldGroup>
         </form>
       </CardContent>

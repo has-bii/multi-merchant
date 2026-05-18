@@ -1,4 +1,5 @@
 interface Env {
+  NODE_ENV: string
   AUTH: {
     SECRET: string
     URL: string
@@ -11,6 +12,10 @@ interface Env {
     ORIGIN_ADMIN: string
     ORIGIN_CLIENT: string
   }
+  EMAIL: {
+    RESEND_API_KEY: string
+    FROM: string
+  }
   ADMIN: {
     EMAIL: string
     PASSWORD: string
@@ -18,6 +23,7 @@ interface Env {
 }
 
 export const env: Env = {
+  NODE_ENV: process.env.NODE_ENV || "development",
   AUTH: {
     SECRET: process.env.BETTER_AUTH_SECRET!,
     URL: process.env.BETTER_AUTH_URL!,
@@ -29,6 +35,10 @@ export const env: Env = {
   CORS: {
     ORIGIN_ADMIN: process.env.ORIGIN_ADMIN!,
     ORIGIN_CLIENT: process.env.ORIGIN_CLIENT!,
+  },
+  EMAIL: {
+    RESEND_API_KEY: process.env.RESEND_API_KEY!,
+    FROM: process.env.EMAIL_FROM!,
   },
   ADMIN: {
     EMAIL: process.env.ADMIN_EMAIL!,

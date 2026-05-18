@@ -6,10 +6,12 @@ export const Route = createFileRoute("/_authenticated/")({ component: Home })
 
 function Home() {
   const { data: session, isPending, refetch } = authClient.useSession()
+  const navigate = Route.useNavigate()
 
   const logoutHandler = async () => {
     await authClient.signOut()
     await refetch()
+    navigate({ to: "/login", search: undefined! })
   }
 
   return (
