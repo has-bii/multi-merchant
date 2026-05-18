@@ -1,19 +1,33 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { createDb } from "../db/index.js";
-import * as schema from "../db/schema.js";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter"
+import { neon } from "@neondatabase/serverless"
+import { betterAuth } from "better-auth/minimal"
+import { admin } from "better-auth/plugins"
+import { drizzle } from "drizzle-orm/neon-http"
 
-export function createAuth(databaseUrl: string, secret: string, baseURL?: string) {
-  const db = createDb(databaseUrl);
+import { env } from "../config/env.js"
 
-  return betterAuth({
-    database: drizzleAdapter(db, {
-      provider: "pg",
-      schema,
-    }),
-    secret,
-    ...(baseURL ? { baseURL } : {}),
-  });
+const sql = neon(process.env.DATABASE_URL!)
+const db = drizzle({ client: sql })
+
+export const auth = betterAuth({
+  secret: env.AUTH.SECRET,
+  baseURL: env.AUTH.URL,
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    camelCase: true,
+  }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  advanced: {
+    database: {
+      generateId: false,
+    },
+  },
+  plugins: [admin()],
+})
+
+export type AuthType = {
+  user: typeof auth.$Infer.Session.user | null
+  session: typeof auth.$Infer.Session.session | null
 }
-
-export type Auth = ReturnType<typeof createAuth>;
