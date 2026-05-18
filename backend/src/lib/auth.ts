@@ -1,13 +1,9 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter"
-import { neon } from "@neondatabase/serverless"
 import { betterAuth } from "better-auth/minimal"
 import { admin } from "better-auth/plugins"
-import { drizzle } from "drizzle-orm/neon-http"
 
 import { env } from "../config/env.js"
-
-const sql = neon(process.env.DATABASE_URL!)
-const db = drizzle({ client: sql })
+import { db } from "./db.js"
 
 export const auth = betterAuth({
   secret: env.AUTH.SECRET,
@@ -23,7 +19,19 @@ export const auth = betterAuth({
     database: {
       generateId: false,
     },
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: env.AUTH.DOMAIN,
+    },
   },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 300,
+      strategy: "compact",
+    },
+  },
+  trustedOrigins: [env.CORS.ORIGIN_ADMIN, env.CORS.ORIGIN_CLIENT],
   plugins: [admin()],
 })
 
