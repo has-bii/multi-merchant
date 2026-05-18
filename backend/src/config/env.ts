@@ -11,6 +11,10 @@ interface Env {
     ORIGIN_ADMIN: string
     ORIGIN_CLIENT: string
   }
+  ADMIN: {
+    EMAIL: string
+    PASSWORD: string
+  }
 }
 
 export const env: Env = {
@@ -25,5 +29,9 @@ export const env: Env = {
   CORS: {
     ORIGIN_ADMIN: process.env.ORIGIN_ADMIN!,
     ORIGIN_CLIENT: process.env.ORIGIN_CLIENT!,
+  },
+  ADMIN: {
+    EMAIL: process.env.ADMIN_EMAIL!,
+    PASSWORD: process.env.ADMIN_PASSWORD!,
   },
 }
