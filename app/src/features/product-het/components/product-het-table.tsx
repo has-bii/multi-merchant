@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button"
+import { SortableHeader } from "@/components/sortable-header"
+import { TableEmptyState } from "@/components/table-empty-state"
 import {
   Table,
   TableBody,
@@ -7,88 +8,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { formatDate, formatPrice } from "@/lib/format"
 
-import { format } from "date-fns"
-import { id } from "date-fns/locale"
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
+import type { ProductHetListItem } from "backend/product-het"
 
 import type { ProductHetSearch } from "../schemas/product-het.schema"
 
-interface ProductHet {
-  id: string
-  name: string
-  price: string
-  createdAt: string
-  updatedAt: string
-}
+const HEADERS = ["Nama", "Harga", "Dibuat", "Diubah"]
 
 interface ProductHetTableProps {
-  data: ProductHet[]
+  data: ProductHetListItem[]
   searchParams: ProductHetSearch
   onSortChange: (orderBy: ProductHetSearch["orderBy"]) => void
 }
 
-function formatPrice(price: string): string {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Number(price))
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return format(date, "HH:mm 'WIB', d MMM yyyy", { locale: id })
-}
-
-function SortableHeader({
-  label,
-  field,
-  currentOrderBy,
-  currentOrder,
-  onSortChange,
-}: {
-  label: string
-  field: ProductHetSearch["orderBy"]
-  currentOrderBy: ProductHetSearch["orderBy"]
-  currentOrder: ProductHetSearch["order"]
-  onSortChange: (orderBy: ProductHetSearch["orderBy"]) => void
-  className?: string
-}) {
-  const isActive = currentOrderBy === field
-
-  return (
-    <Button variant="ghost" size="sm" onClick={() => onSortChange(field)}>
-      <span>{label}</span>
-      {!isActive ? <ArrowUpDown /> : currentOrder === "asc" ? <ArrowUp /> : <ArrowDown />}
-    </Button>
-  )
-}
-
 export function ProductHetTable({ data, searchParams, onSortChange }: ProductHetTableProps) {
   if (data.length === 0) {
-    return (
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nama</TableHead>
-              <TableHead>Harga</TableHead>
-              <TableHead>Dibuat</TableHead>
-              <TableHead>Diubah</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell colSpan={4} className="h-24 text-center">
-                Tidak ada produk ditemukan.
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    )
+    return <TableEmptyState headers={HEADERS} message="Tidak ada produk ditemukan." />
   }
 
   return (
@@ -96,42 +32,17 @@ export function ProductHetTable({ data, searchParams, onSortChange }: ProductHet
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
-              <SortableHeader
-                label="Nama"
-                field="name"
-                currentOrderBy={searchParams.orderBy}
-                currentOrder={searchParams.order}
-                onSortChange={onSortChange}
-              />
-            </TableHead>
-            <TableHead>
-              <SortableHeader
-                label="Harga"
-                field="price"
-                currentOrderBy={searchParams.orderBy}
-                currentOrder={searchParams.order}
-                onSortChange={onSortChange}
-              />
-            </TableHead>
-            <TableHead>
-              <SortableHeader
-                label="Dibuat"
-                field="createdAt"
-                currentOrderBy={searchParams.orderBy}
-                currentOrder={searchParams.order}
-                onSortChange={onSortChange}
-              />
-            </TableHead>
-            <TableHead>
-              <SortableHeader
-                label="Diubah"
-                field="updatedAt"
-                currentOrderBy={searchParams.orderBy}
-                currentOrder={searchParams.order}
-                onSortChange={onSortChange}
-              />
-            </TableHead>
+            {HEADERS.map((header, idx) => (
+              <TableHead key={header}>
+                <SortableHeader<ProductHetSearch["orderBy"]>
+                  label={header}
+                  field={PRODUCT_HET_SORT_FIELDS[idx]}
+                  currentOrderBy={searchParams.orderBy}
+                  currentOrder={searchParams.order}
+                  onSortChange={onSortChange}
+                />
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -148,3 +59,10 @@ export function ProductHetTable({ data, searchParams, onSortChange }: ProductHet
     </div>
   )
 }
+
+const PRODUCT_HET_SORT_FIELDS: ProductHetSearch["orderBy"][] = [
+  "name",
+  "price",
+  "createdAt",
+  "updatedAt",
+]

@@ -1,4 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 
 import { queryClient } from "./lib/query-client"
@@ -15,6 +16,7 @@ export const router = createTanStackRouter({
   Wrap: ({ children }) => (
     <QueryClientProvider client={queryClient}>
       {children}
+      <ReactQueryDevtools />
     </QueryClientProvider>
   ),
 })

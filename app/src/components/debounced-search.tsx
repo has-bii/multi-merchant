@@ -5,39 +5,41 @@ import { Search, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-interface ProductHetSearchInputProps {
+interface DebouncedSearchProps {
   value: string
   onChange: (value: string) => void
+  placeholder?: string
+  debounceMs?: number
 }
 
-export function ProductHetSearchInput({
+export function DebouncedSearch({
   value,
   onChange,
-}: ProductHetSearchInputProps) {
+  placeholder = "Cari...",
+  debounceMs = 300,
+}: DebouncedSearchProps) {
   const [localValue, setLocalValue] = useState(value)
 
-  // Sync local value when URL param changes externally
   useEffect(() => {
     setLocalValue(value)
   }, [value])
 
-  // Debounce: update URL after 300ms of no typing
   useEffect(() => {
     const timer = setTimeout(() => {
       if (localValue !== value) {
         onChange(localValue)
       }
-    }, 300)
+    }, debounceMs)
 
     return () => clearTimeout(timer)
-  }, [localValue, value, onChange])
+  }, [localValue, value, onChange, debounceMs])
 
   return (
     <div className="relative w-full max-w-sm">
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         type="text"
-        placeholder="Cari produk..."
+        placeholder={placeholder}
         className="pl-8 pr-8"
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}

@@ -2,6 +2,26 @@ import { z } from "zod/v4"
 
 import { querySchema } from "../../schemas/query.schema.js"
 
+/** API contract type for a single Product HET row in list responses.
+ *  Mirrors the JSON shape after Drizzle → Hono serialization. */
+export interface ProductHetListItem {
+  id: string
+  name: string
+  price: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProductHetListResponse {
+  data: ProductHetListItem[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
+
 export const productHetSchema = z.object({
   name: z
     .string()
