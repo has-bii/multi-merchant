@@ -20,7 +20,7 @@ import {
 import { authClient } from "@/lib/auth-client"
 
 import { useNavigate } from "@tanstack/react-router"
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react"
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react"
 
 export function NavUser() {
   const navigate = useNavigate()
