@@ -3,10 +3,11 @@ import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 
 import { env } from "./config/env.js"
-import { auth } from "./lib/auth.js"
-import productHets from "./routes/product-het.js"
+import { type AuthType, auth } from "./lib/auth.js"
+import { sessionMiddleware } from "./middlewares/session.js"
+import { productHetRoute } from "./modules/product-het/index.js"
 
-const app = new Hono().basePath("/api")
+const app = new Hono<{ Variables: AuthType }>().basePath("/api")
 
 app.use(logger())
 
@@ -15,21 +16,23 @@ app.use(
   cors({
     origin: [env.CORS.ORIGIN_ADMIN, env.CORS.ORIGIN_CLIENT],
     allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["POST", "GET", "OPTIONS"],
+    allowMethods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
     credentials: true,
   }),
 )
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello, World!" })
-})
-
+// Auth handler — no session middleware
 app.on(["POST", "GET"], "/auth/*", (c) => {
   return auth.handler(c.req.raw)
 })
 
-app.route("/product-het", productHets)
+// Protected routes — session middleware applies
+const api = new Hono<{ Variables: AuthType }>()
+api.use("*", sessionMiddleware)
+api.route("/product-het", productHetRoute)
+
+app.route("/", api)
 
 export default app

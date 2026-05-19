@@ -6,23 +6,44 @@
 ```
 backend/
 ├── src/
-│   ├── routes/              # Hono route modules
-│   │   └── product-het.ts
-│   ├── db/
-│   │   ├── schema.ts        # Drizzle schema (user, session, account, verification, productHets)
-│   │   └── seed.ts          # Admin seeder
-│   ├── config/
-│   │   └── env.ts            # Typed env vars
+│   ├── modules/                    # Feature modules (layered)
+│   │   └── product-het/
+│   │       ├── index.ts            # Public export
+│   │       ├── schema.ts           # Zod validation + DTO types
+│   │       ├── repository.ts       # DB adapter (Drizzle queries)
+│   │       ├── service.ts          # Business logic
+│   │       └── route.ts            # HTTP wiring
+│   ├── schemas/
+│   │   └── query.schema.ts         # Shared pagination/query base
+│   ├── middlewares/
+│   │   ├── auth.ts                 # requireAuth, requireAdmin
+│   │   ├── session.ts              # Better Auth session
+│   │   └── validator.ts            # Shared zValidator (throws HTTPException)
 │   ├── lib/
-│   │   ├── auth.ts           # Better Auth config (drizzle adapter, admin plugin, cross-subdomain cookies)
-│   │   └── db.ts             # Drizzle + Neon client
-│   ├── app.ts                # Hono app (CORS, auth handler, routes)
-│   └── dev.ts                # Dev server entry (@hono/node-server)
-├── drizzle/                  # Migration files
-├── drizzle.config.ts         # Drizzle Kit config
+│   │   ├── auth.ts                 # Better Auth config
+│   │   ├── db.ts                   # Drizzle + Neon client
+│   │   ├── email.ts                # Email sending
+│   │   ├── paginate.ts             # Generic paginate<T>()
+│   │   └── typed-app.ts            # createApp() with AuthType
+│   ├── db/
+│   │   ├── schema.ts               # Centralized Drizzle tables
+│   │   └── seed.ts                 # Admin seeder
+│   ├── config/
+│   │   └── env.ts                  # Typed env vars
+│   ├── app.ts                      # Hono app (CORS, auth, routes)
+│   └── dev.ts                      # Dev server entry
+├── docs/                           # Architecture documentation
+│   ├── MODULES.md                  # Module conventions
+│   ├── SCHEMA.md                   # Validation + DTO patterns
+│   ├── REPOSITORY.md               # DB adapter layer patterns
+│   ├── SERVICE.md                   # Business logic layer patterns
+│   └── ROUTE.md                     # HTTP wiring layer patterns
+├── CONTEXT.md                      # Domain glossary + architecture decisions
+├── drizzle/                        # Migration files
+├── drizzle.config.ts
 ├── .prettierrc
 ├── tsconfig.json
-└── .env.example              # BETTER_AUTH_SECRET, BETTER_AUTH_URL, DATABASE_URL, DOMAIN, ORIGIN_ADMIN, ORIGIN_CLIENT, ADMIN_EMAIL, ADMIN_PASSWORD
+└── .env.example
 ```
 
 ## COMMANDS
@@ -40,23 +61,33 @@ backend/
 - **Language**: TypeScript (strict mode, `noUnusedLocals`, `noUnusedParameters`, `verbatimModuleSyntax`)
 - **Style**: Prettier (`printWidth: 100`, `semi: false`) + `@trivago/prettier-plugin-sort-imports`
 - **Lint**: No dedicated linter
-- **Framework**: Hono with `.basePath("/api")`, route modules exported as default
+- **Framework**: Hono with `.basePath("/api")`
 - **DB**: Drizzle ORM with Neon serverless, `uuid_generate_v7()` for PKs, camelCase columns
 - **Validation**: Zod v4 (import from `zod/v4`)
+- **Module pattern**: Layered — see [docs/MODULES.md](docs/MODULES.md)
 
 ## WHERE TO LOOK
-- **Source**: `src/`
-- **Routes**: `src/routes/`
+- **Modules**: `src/modules/<name>/` — layered: schema → repository → service → route → index
+- **Shared schemas**: `src/schemas/`
+- **Shared middlewares**: `src/middlewares/`
+- **Shared libs**: `src/lib/`
 - **DB schema**: `src/db/schema.ts`
 - **Auth config**: `src/lib/auth.ts`
 - **DB client**: `src/lib/db.ts`
 - **Env vars**: `src/config/env.ts`
 - **Hono app**: `src/app.ts`
-- **Migrations**: `drizzle/`
+- **Domain glossary**: `CONTEXT.md`
 
 ## NOTES
-- **Auth**: Better Auth with admin plugin, signup disabled (`disableSignUp: true`). Admin seeder creates initial user. Cross-subdomain cookies enabled.
+- **Auth**: Better Auth with admin plugin, signup disabled. Admin seeder creates initial user. Cross-subdomain cookies enabled.
 - **CORS**: Allows `ORIGIN_ADMIN` and `ORIGIN_CLIENT` origins.
 - **Language**: Validation messages in Indonesian.
 - **DB Migrations**: Use `drizzle-kit generate` → `drizzle-kit migrate`. Neon serverless driver.
 - **Monorepo**: Separate `pnpm-lock.yaml`, `package.json`, `.env`. Run commands from `backend/` directory.
+
+## DOCUMENTATION
+- **Module conventions**: [docs/MODULES.md](docs/MODULES.md)
+- **Schema patterns**: [docs/SCHEMA.md](docs/SCHEMA.md)
+- **Repository patterns**: [docs/REPOSITORY.md](docs/REPOSITORY.md)
+- **Service patterns**: [docs/SERVICE.md](docs/SERVICE.md)
+- **Route patterns**: [docs/ROUTE.md](docs/ROUTE.md)
