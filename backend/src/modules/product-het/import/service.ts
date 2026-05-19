@@ -3,21 +3,19 @@ import { HTTPException } from "hono/http-exception"
 
 import * as repo from "../repository.js"
 import { productHetSchema } from "../schema.js"
-import type {
-  ImportPreviewResponseDto,
-  ImportExecuteResultDto,
-} from "./types.js"
 import type { ImportExecutePayloadDto } from "./schema.js"
+import type { ImportExecuteResultDto, ImportPreviewResponseDto } from "./types.js"
 
 const MAX_ROWS = 100
 const VALID_EXTENSIONS = [".csv"] as const
 
 function parsePrice(raw: unknown): number | null {
-  if (raw === null || raw === undefined) return null
+  if (raw == null || raw === undefined) return null
   const str = String(raw).trim()
   if (!str) return null
-  const cleaned = str.replace(/[.,]/g, "")
-  const num = Number(cleaned)
+  const digits = str.replace(/\D/g, "")
+  if (!digits) return null
+  const num = Number(digits)
   if (!Number.isInteger(num) || num <= 0) return null
   return num
 }
@@ -144,7 +142,9 @@ export async function executeImportProduct(
           data: { row: item.row, id: result.id, name: result.name, price: Number(result.price) },
         }
       } catch (e) {
-        const reason = isUniqueViolation(e) ? "Nama produk sudah digunakan" : "Gagal memperbarui produk"
+        const reason = isUniqueViolation(e)
+          ? "Nama produk sudah digunakan"
+          : "Gagal memperbarui produk"
         return { ok: false as const, error: { row: item.row, name: item.name, reason } }
       }
     }),
