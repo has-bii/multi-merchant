@@ -20,7 +20,7 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as AuthenticatedUserIndexRouteImport } from './routes/_authenticated/user/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user/dashboard'
-import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin/dashboard'
+import { Route as AuthenticatedAdminProdukHetRouteImport } from './routes/_authenticated/admin/produk-het'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -76,10 +76,10 @@ const AuthenticatedUserDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => AuthenticatedUserRoute,
   } as any)
-const AuthenticatedAdminDashboardRoute =
-  AuthenticatedAdminDashboardRouteImport.update({
-    id: '/dashboard',
-    path: '/dashboard',
+const AuthenticatedAdminProdukHetRoute =
+  AuthenticatedAdminProdukHetRouteImport.update({
+    id: '/produk-het',
+    path: '/produk-het',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 
@@ -90,7 +90,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/user': typeof AuthenticatedUserRouteWithChildren
-  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/produk-het': typeof AuthenticatedAdminProdukHetRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/user/': typeof AuthenticatedUserIndexRoute
@@ -100,7 +100,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/produk-het': typeof AuthenticatedAdminProdukHetRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/user': typeof AuthenticatedUserIndexRoute
@@ -115,7 +115,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/user': typeof AuthenticatedUserRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/_authenticated/admin/produk-het': typeof AuthenticatedAdminProdukHetRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/user/': typeof AuthenticatedUserIndexRoute
@@ -129,7 +129,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/user'
-    | '/admin/dashboard'
+    | '/admin/produk-het'
     | '/user/dashboard'
     | '/admin/'
     | '/user/'
@@ -139,7 +139,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
-    | '/admin/dashboard'
+    | '/admin/produk-het'
     | '/user/dashboard'
     | '/admin'
     | '/user'
@@ -153,7 +153,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/user'
     | '/_authenticated/'
-    | '/_authenticated/admin/dashboard'
+    | '/_authenticated/admin/produk-het'
     | '/_authenticated/user/dashboard'
     | '/_authenticated/admin/'
     | '/_authenticated/user/'
@@ -243,11 +243,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserDashboardRouteImport
       parentRoute: typeof AuthenticatedUserRoute
     }
-    '/_authenticated/admin/dashboard': {
-      id: '/_authenticated/admin/dashboard'
-      path: '/dashboard'
-      fullPath: '/admin/dashboard'
-      preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+    '/_authenticated/admin/produk-het': {
+      id: '/_authenticated/admin/produk-het'
+      path: '/produk-het'
+      fullPath: '/admin/produk-het'
+      preLoaderRoute: typeof AuthenticatedAdminProdukHetRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
   }
@@ -268,12 +268,12 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticatedAdminRouteChildren {
-  AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
+  AuthenticatedAdminProdukHetRoute: typeof AuthenticatedAdminProdukHetRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
-  AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
+  AuthenticatedAdminProdukHetRoute: AuthenticatedAdminProdukHetRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
