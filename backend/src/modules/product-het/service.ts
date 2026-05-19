@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception"
 
 import * as repo from "./repository.js"
-import { GetProductHetQueryDto } from "./schema.js"
+import type { GetProductHetQueryDto } from "./schema.js"
 
 export async function listProducts(query: GetProductHetQueryDto) {
   return repo.list(query)

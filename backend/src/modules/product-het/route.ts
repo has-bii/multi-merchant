@@ -4,7 +4,7 @@ import { requireAdmin, requireAuth } from "../../middlewares/auth.js"
 import { zValidator } from "../../middlewares/validator.js"
 import { getProductHetQuerySchema, productHetSchema } from "./schema.js"
 
-export const productHetRoute = createApp()
+export const crudRoute = createApp()
   .get("/", requireAuth, zValidator("query", getProductHetQuerySchema), async (c) => {
     return c.json(await service.listProducts(c.req.valid("query")))
   })

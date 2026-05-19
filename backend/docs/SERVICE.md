@@ -1,4 +1,4 @@
-# SERVICE.md
+# Service
 
 ## Purpose
 
@@ -26,13 +26,16 @@ Business logic layer. Enforces domain rules (uniqueness, existence, authorizatio
    ```
 6. **Function naming**: `<verb><Resource>` — `listProducts`, `getProduct`, `createProduct`, `updateProduct`, `deleteProduct`.
 7. **Error messages in Indonesian** where user-facing.
+8. **Canonicalization lives in schemas.** Use schema transforms (e.g. `.transform(v => v.toLowerCase())`) as the single source of truth. Don't re-normalize in service logic. When sub-modules need the same normalization, use the parent's schema shape: `parentSchema.shape.field.parse(rawInput)`.
+9. **Domain validation lives in service, not route.** If a validation rule crosses multiple fields or requires DB state (e.g. "what file formats do we accept?"), it belongs in service. Route handles HTTP concerns (body size limits, file extraction); service handles domain semantics.
 
-## Anti-Patterns
+## Anti-patterns
 
 - ❌ Direct `db` imports — use repository.
 - ❌ HTTP response mapping (`c.json()`) — that's route's job.
 - ❌ Zod validation — that's schema + route's job.
+- ❌ Duplicating schema transforms (e.g. re-lowercasing a name that the schema already lowercases).
 
-## Future Note
+## Sub-module Services
 
-When tests arrive, these `HTTPException` throws should become domain-specific errors (e.g. `ProductNotFoundError`, `DuplicateNameError`). The route layer will map those to HTTP statuses. This makes service testable without Hono dependencies.
+Sub-module services import from `../repository.js` — **not** `../service.js`. This is intentional: sub-modules (e.g. import) have different error handling semantics than CRUD operations. The repository is the correct seam for data access.

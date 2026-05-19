@@ -8,11 +8,16 @@ backend/
 ├── src/
 │   ├── modules/                    # Feature modules (layered)
 │   │   └── product-het/
-│   │       ├── index.ts            # Public export
-│   │       ├── schema.ts           # Zod validation + DTO types
+│   │       ├── index.ts            # Route composition (CRUD + sub-module)
+│   │       ├── schema.ts           # Zod schemas + z.infer DTO types
 │   │       ├── repository.ts       # DB adapter (Drizzle queries)
-│   │       ├── service.ts          # Business logic
-│   │       └── route.ts            # HTTP wiring
+│   │       ├── service.ts          # Business logic (CRUD)
+│   │       ├── route.ts            # HTTP wiring (CRUD)
+│   │       └── import/             # Sub-module: bulk import
+│   │           ├── schema.ts       # Import schemas + z.infer types
+│   │           ├── types.ts        # Residual types (not z.infer-able)
+│   │           ├── service.ts      # Import logic (depends on ../repository)
+│   │           └── route.ts        # Import routes
 │   ├── schemas/
 │   │   └── query.schema.ts         # Shared pagination/query base
 │   ├── middlewares/
@@ -33,11 +38,12 @@ backend/
 │   ├── app.ts                      # Hono app (CORS, auth, routes)
 │   └── dev.ts                      # Dev server entry
 ├── docs/                           # Architecture documentation
-│   ├── MODULES.md                  # Module conventions
+│   ├── MODULES.md                  # Module + sub-module conventions
 │   ├── SCHEMA.md                   # Validation + DTO patterns
+│   ├── TYPES.md                    # When to use types.ts vs z.infer
 │   ├── REPOSITORY.md               # DB adapter layer patterns
-│   ├── SERVICE.md                   # Business logic layer patterns
-│   └── ROUTE.md                     # HTTP wiring layer patterns
+│   ├── SERVICE.md                  # Business logic layer patterns
+│   └── ROUTE.md                    # HTTP wiring layer patterns
 ├── CONTEXT.md                      # Domain glossary + architecture decisions
 ├── drizzle/                        # Migration files
 ├── drizzle.config.ts
@@ -86,8 +92,9 @@ backend/
 - **Monorepo**: Separate `pnpm-lock.yaml`, `package.json`, `.env`. Run commands from `backend/` directory.
 
 ## DOCUMENTATION
-- **Module conventions**: [docs/MODULES.md](docs/MODULES.md)
-- **Schema patterns**: [docs/SCHEMA.md](docs/SCHEMA.md)
+- **Module conventions**: [docs/MODULES.md](docs/MODULES.md) — includes sub-module pattern
+- **Schema patterns**: [docs/SCHEMA.md](docs/SCHEMA.md) — z.infer over manual types
+- **Types patterns**: [docs/TYPES.md](docs/TYPES.md) — when types.ts vs z.infer
 - **Repository patterns**: [docs/REPOSITORY.md](docs/REPOSITORY.md)
-- **Service patterns**: [docs/SERVICE.md](docs/SERVICE.md)
-- **Route patterns**: [docs/ROUTE.md](docs/ROUTE.md)
+- **Service patterns**: [docs/SERVICE.md](docs/SERVICE.md) — sub-modules depend on repo, not service
+- **Route patterns**: [docs/ROUTE.md](docs/ROUTE.md) — route vs service responsibility split

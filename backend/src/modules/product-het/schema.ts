@@ -6,7 +6,7 @@ export const productHetSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Nama produk wajib diisi" })
-    .transform((v) => v.toLowerCase()),
+    .transform((v) => v.trim().toLowerCase()),
   price: z.coerce
     .number()
     .int({ message: "Harga harus bilangan bulat" })

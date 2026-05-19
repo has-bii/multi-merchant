@@ -3,7 +3,7 @@ import { count, eq } from "drizzle-orm"
 import { productHets } from "../../db/schema.js"
 import { db } from "../../lib/db.js"
 import { paginate } from "../../lib/paginate.js"
-import { GetProductHetQueryDto } from "./schema.js"
+import type { GetProductHetQueryDto } from "./schema.js"
 
 const sortableFields = {
   name: "name",
@@ -66,3 +66,10 @@ export async function update(id: string, data: { name: string; price: number }) 
 export async function remove(id: string) {
   await db.delete(productHets).where(eq(productHets.id, id))
 }
+
+export async function listAll() {
+  return db.query.productHets.findMany({
+    columns: { id: true, name: true, price: true },
+  })
+}
+
