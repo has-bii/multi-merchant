@@ -10,7 +10,6 @@
     "drizzle-orm": "^0.45.2",
     "hono": "^4.12.19",
     "resend": "^6.12.3",
-    "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

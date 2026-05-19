@@ -1,4 +1,3 @@
-import * as XLSX from "xlsx"
 import { parse } from "csv-parse/sync"
 import { HTTPException } from "hono/http-exception"
 
@@ -11,7 +10,7 @@ import type {
 import type { ImportExecutePayloadDto } from "./schema.js"
 
 const MAX_ROWS = 100
-const VALID_EXTENSIONS = [".csv", ".xlsx"] as const
+const VALID_EXTENSIONS = [".csv"] as const
 
 function parsePrice(raw: unknown): number | null {
   if (raw === null || raw === undefined) return null
@@ -23,30 +22,23 @@ function parsePrice(raw: unknown): number | null {
   return num
 }
 
-function parseFileBuffer(buffer: Buffer, ext: string): Record<string, unknown>[] {
-  if (ext === ".csv") {
-    const text = buffer.toString("utf-8")
-    return parse(text, {
-      columns: true,
-      skip_empty_lines: true,
-      trim: true,
-    }) as Record<string, unknown>[]
-  }
-
-  const workbook = XLSX.read(buffer, { type: "buffer" })
-  const sheetName = workbook.SheetNames[0]!
-  const sheet = workbook.Sheets[sheetName]!
-  return XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" })
+function parseFileBuffer(buffer: Buffer): string[][] {
+  const text = buffer.toString("utf-8")
+  return parse(text, {
+    columns: false,
+    skip_empty_lines: true,
+    trim: true,
+  }) as string[][]
 }
 
 export async function previewImportProduct(file: File): Promise<ImportPreviewResponseDto> {
   const ext = "." + file.name.split(".").pop()?.toLowerCase()
   if (!VALID_EXTENSIONS.includes(ext as (typeof VALID_EXTENSIONS)[number])) {
-    throw new HTTPException(400, { message: "Format file tidak didukung. Gunakan .csv atau .xlsx" })
+    throw new HTTPException(400, { message: "Format file tidak didukung. Gunakan .csv" })
   }
 
   const buffer = Buffer.from(await file.arrayBuffer())
-  const rows = parseFileBuffer(buffer, ext!)
+  const rows = parseFileBuffer(buffer)
 
   if (rows.length > MAX_ROWS) {
     throw new HTTPException(400, {
@@ -66,11 +58,11 @@ export async function previewImportProduct(file: File): Promise<ImportPreviewRes
   const seenNames = new Set<string>()
 
   for (let i = 0; i < rows.length; i++) {
-    const rowIdx = i + 2
+    const rowIdx = i + 1
     const row = rows[i]!
 
-    const rawName = row["name"] ?? row["Name"] ?? row["NAME"]
-    const rawPrice = row["price"] ?? row["Price"] ?? row["PRICE"]
+    const rawName = row[0]
+    const rawPrice = row[1]
 
     if (!rawName || !String(rawName).trim()) {
       ignored.push({ row: rowIdx, reason: "Kolom nama kosong" })
