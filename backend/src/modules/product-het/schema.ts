@@ -14,6 +14,7 @@ export const productHetSchema = z.object({
 })
 
 export const getProductHetQuerySchema = querySchema.extend({
+  search: z.string().optional(),
   orderBy: z.enum(["name", "price", "createdAt", "updatedAt"]).default("createdAt"),
   order: z.enum(["asc", "desc"]).default("desc"),
 })

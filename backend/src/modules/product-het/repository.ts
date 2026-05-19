@@ -1,4 +1,4 @@
-import { count, eq } from "drizzle-orm"
+import { count, eq, ilike } from "drizzle-orm"
 
 import { productHets } from "../../db/schema.js"
 import { db } from "../../lib/db.js"
@@ -12,13 +12,15 @@ const sortableFields = {
   updatedAt: "updatedAt",
 } as const
 
-export async function list({ page, limit, orderBy, order }: GetProductHetQueryDto) {
+export async function list({ page, limit, orderBy, order, search }: GetProductHetQueryDto) {
   const field = sortableFields[orderBy]
+  const where = search ? ilike(productHets.name, `${search}%`) : undefined
 
   return paginate(
     (l, o) =>
       db.query.productHets.findMany({
         columns: { id: true, name: true, price: true, createdAt: true, updatedAt: true },
+        where,
         limit: l,
         offset: o,
         orderBy: (ph, { asc, desc }) => [
@@ -26,7 +28,7 @@ export async function list({ page, limit, orderBy, order }: GetProductHetQueryDt
         ],
       }),
     async () => {
-      const [row] = await db.select({ count: count() }).from(productHets)
+      const [row] = await db.select({ count: count() }).from(productHets).where(where)
       return row?.count ?? 0
     },
     page,
