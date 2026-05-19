@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "type": "module",
+  "exports": {
+    "./product-het": "./src/modules/product-het/index.ts"
+  },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.11",
     "@hono/zod-validator": "^0.8.0",
