@@ -35,9 +35,14 @@ function RouteComponent() {
           onChange={(search) => update({ search })}
           placeholder="Cari produk..."
         />
-        <Button asChild>
-          <Link to="/admin/produk-het/tambah">Tambah</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link to="/admin/produk-het/import">Import</Link>
+          </Button>
+          <Button asChild>
+            <Link to="/admin/produk-het/tambah">Tambah</Link>
+          </Button>
+        </div>
       </div>
 
       <QueryBoundary loadingFallback={<TableSkeleton columns={4} rows={params.limit} />}>

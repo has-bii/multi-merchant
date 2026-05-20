@@ -83,6 +83,10 @@ export async function previewImportProduct(file: File): Promise<ImportPreviewRes
 
     const existing = existingMap.get(name)
     if (existing) {
+      if (existing.price === price) {
+        ignored.push({ row: rowIdx, name, reason: "Harga sama dengan yang sudah ada" })
+        continue
+      }
       willUpdate.push({
         row: rowIdx,
         id: existing.id,

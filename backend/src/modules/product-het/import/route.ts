@@ -1,30 +1,28 @@
 import { bodyLimit } from "hono/body-limit"
-import { HTTPException } from "hono/http-exception"
 
 import * as service from "./service.js"
 import { createApp } from "../../../lib/typed-app.js"
 import { requireAdmin } from "../../../middlewares/auth.js"
 import { zValidator } from "../../../middlewares/validator.js"
-import { importExecutePayloadSchema } from "./schema.js"
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+import { importExecutePayloadSchema, importPreviewSchema } from "./schema.js"
 
 const fileLimit = bodyLimit({
-  maxSize: MAX_FILE_SIZE,
+  maxSize: 5 * 1024 * 1024,
   onError: (c) => c.json({ message: "Ukuran file maksimal 5MB" }, 413),
 })
 
 export const importRoute = createApp()
-  .post("/import/preview", requireAdmin, fileLimit, async (c) => {
-    const body = await c.req.parseBody()
-    const file = body["file"]
+  .post(
+    "/import/preview",
+    requireAdmin,
+    fileLimit,
+    zValidator("form", importPreviewSchema),
+    async (c) => {
+      const parsed = c.req.valid("form")
 
-    if (!file || !(file instanceof File)) {
-      throw new HTTPException(400, { message: "File wajib dikirim" })
-    }
-
-    return c.json(await service.previewImportProduct(file))
-  })
+      return c.json(await service.previewImportProduct(parsed.file))
+    },
+  )
   .post(
     "/import/execute",
     requireAdmin,

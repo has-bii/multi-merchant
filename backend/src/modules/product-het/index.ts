@@ -12,3 +12,13 @@ export type {
   ProductHetDto,
   GetProductHetQueryDto,
 } from "./schema.js"
+
+export type {
+  ImportPreviewRow,
+  ImportPreviewResponseDto,
+  ImportPreviewWillUpdateRow,
+  ImportPreviewIgnoredRow,
+  ImportExecuteResultDto,
+  ImportExecuteResultItem,
+  ImportExecuteErrorRow,
+} from "./import/types.js"

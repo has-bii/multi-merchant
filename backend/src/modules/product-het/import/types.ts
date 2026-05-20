@@ -1,5 +1,7 @@
 import type { ImportPreviewRow } from "./schema.js"
 
+export type { ImportPreviewRow } from "./schema.js"
+
 export interface ImportPreviewWillUpdateRow extends ImportPreviewRow {
   id: string
   oldPrice: number
