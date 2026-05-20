@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card"
 import { ProductHetForm } from "@/features/product-het/components/product-het-form"
 import { getProductHetByIdQueryOptions } from "@/features/product-het/queries/product-het.queries"
 
@@ -13,12 +14,18 @@ function RouteComponent() {
   const product = Route.useLoaderData()
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Edit Produk HET</h1>
         <p className="text-muted-foreground mt-2">Perbarui informasi produk.</p>
       </div>
-      <ProductHetForm initialData={product} />
+      <div className="max-w-xl">
+        <Card>
+          <CardContent>
+            <ProductHetForm initialData={product} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
