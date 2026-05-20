@@ -1,9 +1,17 @@
 import { QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
+import { lazy, Suspense } from "react"
 
 import { queryClient } from "./lib/query-client"
 import { routeTree } from "./routeTree.gen"
+
+const ReactQueryDevtools = lazy(() =>
+  import.meta.env.DEV
+    ? import("@tanstack/react-query-devtools").then((m) => ({
+        default: m.ReactQueryDevtools,
+      }))
+    : Promise.resolve({ default: () => null })
+)
 
 export const router = createTanStackRouter({
   routeTree,
@@ -17,7 +25,9 @@ export const router = createTanStackRouter({
   Wrap: ({ children }) => (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools />
+      <Suspense>
+        <ReactQueryDevtools />
+      </Suspense>
     </QueryClientProvider>
   ),
 })
