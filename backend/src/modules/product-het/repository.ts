@@ -1,4 +1,4 @@
-import { count, eq, ilike } from "drizzle-orm"
+import { count, eq, ilike, inArray } from "drizzle-orm"
 
 import { productHets } from "../../db/schema.js"
 import { db } from "../../lib/db.js"
@@ -73,5 +73,9 @@ export async function listAll() {
   return db.query.productHets.findMany({
     columns: { id: true, name: true, price: true },
   })
+}
+
+export async function bulkRemove(ids: string[]) {
+  await db.delete(productHets).where(inArray(productHets.id, ids))
 }
 

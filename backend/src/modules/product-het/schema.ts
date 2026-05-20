@@ -39,5 +39,9 @@ export const getProductHetQuerySchema = querySchema.extend({
   order: z.enum(["asc", "desc"]).default("desc"),
 })
 
+export const bulkDeleteSchema = z.object({
+  ids: z.array(z.string()).min(1, { message: "Pilih minimal 1 produk" }),
+})
+
 export type ProductHetDto = z.infer<typeof productHetSchema>
 export type GetProductHetQueryDto = z.infer<typeof getProductHetQuerySchema>

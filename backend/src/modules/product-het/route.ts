@@ -2,7 +2,7 @@ import * as service from "./service.js"
 import { createApp } from "../../lib/typed-app.js"
 import { requireAdmin, requireAuth } from "../../middlewares/auth.js"
 import { zValidator } from "../../middlewares/validator.js"
-import { getProductHetQuerySchema, productHetSchema } from "./schema.js"
+import { bulkDeleteSchema, getProductHetQuerySchema, productHetSchema } from "./schema.js"
 
 export const crudRoute = createApp()
   .get("/", requireAuth, zValidator("query", getProductHetQuerySchema), async (c) => {
@@ -19,5 +19,10 @@ export const crudRoute = createApp()
   })
   .delete("/:id", requireAdmin, async (c) => {
     await service.deleteProduct(c.req.param("id"))
+    return c.body(null, 204)
+  })
+  .post("/bulk-delete", requireAdmin, zValidator("json", bulkDeleteSchema), async (c) => {
+    const { ids } = c.req.valid("json")
+    await service.bulkDeleteProducts(ids)
     return c.body(null, 204)
   })

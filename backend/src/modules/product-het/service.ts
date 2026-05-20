@@ -44,3 +44,10 @@ export async function deleteProduct(id: string) {
   }
   await repo.remove(id)
 }
+
+export async function bulkDeleteProducts(ids: string[]) {
+  if (ids.length === 0) {
+    throw new HTTPException(400, { message: "ID tidak boleh kosong" })
+  }
+  await repo.bulkRemove(ids)
+}
