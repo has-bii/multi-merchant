@@ -2,6 +2,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { formatPriceNumber, formatPriceString } from "@/lib/format"
+
 import { useProductHetForm } from "../hooks/use-product-het-form"
 
 interface ProductHetFormProps {
@@ -63,10 +65,11 @@ export function ProductHetForm({ initialData }: ProductHetFormProps) {
                 <Input
                   id={field.name}
                   name={field.name}
-                  type="number"
-                  value={field.state.value}
+                  type="text"
+                  inputMode="numeric"
+                  value={field.state.value ? formatPriceString(Number(field.state.value)) : ""}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e) => field.handleChange(formatPriceNumber(e.target.value).toString())}
                   data-invalid={isInvalid}
                   placeholder="0"
                   autoComplete="off"
@@ -78,18 +81,10 @@ export function ProductHetForm({ initialData }: ProductHetFormProps) {
         />
 
         <form.Subscribe
-          selector={({ canSubmit, isDirty, isSubmitting }) => [
-            canSubmit,
-            isDirty,
-            isSubmitting,
-          ]}
+          selector={({ canSubmit, isDirty, isSubmitting }) => [canSubmit, isDirty, isSubmitting]}
           children={([canSubmit, isDirty, isSubmitting]) => (
             <Button type="submit" disabled={!canSubmit || !isDirty || isSubmitting}>
-              {isSubmitting
-                ? "Menyimpan..."
-                : isEdit
-                  ? "Perbarui"
-                  : "Simpan"}
+              {isSubmitting ? "Menyimpan..." : isEdit ? "Perbarui" : "Simpan"}
             </Button>
           )}
         />
