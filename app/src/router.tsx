@@ -12,6 +12,7 @@ export const router = createTanStackRouter({
   defaultPreloadStaleTime: 0,
   context: {
     auth: undefined!,
+    queryClient,
   },
   Wrap: ({ children }) => (
     <QueryClientProvider client={queryClient}>

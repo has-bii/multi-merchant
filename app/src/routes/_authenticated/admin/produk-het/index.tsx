@@ -6,9 +6,9 @@ import { ProductHetListContent } from "@/features/product-het/components/product
 import { productHetSearchSchema } from "@/features/product-het/schemas/product-het.schema"
 import { useListState } from "@/hooks/use-list-state"
 
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/_authenticated/admin/produk-het")({
+export const Route = createFileRoute("/_authenticated/admin/produk-het/")({
   validateSearch: productHetSearchSchema,
   component: RouteComponent,
 })
@@ -35,7 +35,9 @@ function RouteComponent() {
           onChange={(search) => update({ search })}
           placeholder="Cari produk..."
         />
-        <Button>Tambah</Button>
+        <Button asChild>
+          <Link to="/admin/produk-het/tambah">Tambah</Link>
+        </Button>
       </div>
 
       <QueryBoundary loadingFallback={<TableSkeleton columns={4} rows={params.limit} />}>
