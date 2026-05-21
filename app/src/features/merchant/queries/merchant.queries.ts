@@ -9,6 +9,7 @@ export const merchantKeys = {
   all: ["merchant"] as const,
   list: (params: MerchantSearch) => [...merchantKeys.all, "list", params] as const,
   detail: (id: string) => [...merchantKeys.all, "detail", id] as const,
+  byUser: () => [...merchantKeys.all, "byUser"] as const,
 }
 
 export function getMerchantListQueryOptions(params: MerchantSearch) {
@@ -36,6 +37,20 @@ export function getMerchantDetailQueryOptions(id: string) {
     queryFn: async () => {
       const res = await merchantClient[":id"].$get({ param: { id } })
       if (!res.ok) throw new Error("Gagal memuat detail merchant")
+      return (await res.json()) as MerchantDetailResponse
+    },
+  })
+}
+
+export function getMerchantByUserQueryOptions() {
+  return queryOptions({
+    queryKey: merchantKeys.byUser(),
+    queryFn: async () => {
+      const res = await merchantClient[":id"].$get({ param: { id: "me" } })
+      if (!res.ok) {
+        if (res.status === 404) return null
+        throw new Error("Gagal memuat data merchant")
+      }
       return (await res.json()) as MerchantDetailResponse
     },
   })

@@ -19,7 +19,7 @@ import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as AuthenticatedUserIndexRouteImport } from './routes/_authenticated/user/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
-import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user/dashboard'
+import { Route as AuthenticatedUserMerchantRouteImport } from './routes/_authenticated/user/merchant'
 import { Route as AuthenticatedAdminProdukHetIndexRouteImport } from './routes/_authenticated/admin/produk-het/index'
 import { Route as AuthenticatedAdminPenggunaIndexRouteImport } from './routes/_authenticated/admin/pengguna/index'
 import { Route as AuthenticatedAdminMerchantIndexRouteImport } from './routes/_authenticated/admin/merchant/index'
@@ -77,10 +77,10 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const AuthenticatedUserDashboardRoute =
-  AuthenticatedUserDashboardRouteImport.update({
-    id: '/dashboard',
-    path: '/dashboard',
+const AuthenticatedUserMerchantRoute =
+  AuthenticatedUserMerchantRouteImport.update({
+    id: '/merchant',
+    path: '/merchant',
     getParentRoute: () => AuthenticatedUserRoute,
   } as any)
 const AuthenticatedAdminProdukHetIndexRoute =
@@ -139,7 +139,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/user': typeof AuthenticatedUserRouteWithChildren
-  '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/user/merchant': typeof AuthenticatedUserMerchantRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/user/': typeof AuthenticatedUserIndexRoute
   '/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
@@ -156,7 +156,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/user/merchant': typeof AuthenticatedUserMerchantRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/user': typeof AuthenticatedUserIndexRoute
   '/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
@@ -178,7 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/user': typeof AuthenticatedUserRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/_authenticated/user/merchant': typeof AuthenticatedUserMerchantRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/user/': typeof AuthenticatedUserIndexRoute
   '/_authenticated/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
@@ -199,7 +199,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/user'
-    | '/user/dashboard'
+    | '/user/merchant'
     | '/admin/'
     | '/user/'
     | '/admin/merchant/$id'
@@ -216,7 +216,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/reset-password'
-    | '/user/dashboard'
+    | '/user/merchant'
     | '/admin'
     | '/user'
     | '/admin/merchant/$id'
@@ -237,7 +237,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/user'
     | '/_authenticated/'
-    | '/_authenticated/user/dashboard'
+    | '/_authenticated/user/merchant'
     | '/_authenticated/admin/'
     | '/_authenticated/user/'
     | '/_authenticated/admin/merchant/$id'
@@ -327,11 +327,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/user/dashboard': {
-      id: '/_authenticated/user/dashboard'
-      path: '/dashboard'
-      fullPath: '/user/dashboard'
-      preLoaderRoute: typeof AuthenticatedUserDashboardRouteImport
+    '/_authenticated/user/merchant': {
+      id: '/_authenticated/user/merchant'
+      path: '/merchant'
+      fullPath: '/user/merchant'
+      preLoaderRoute: typeof AuthenticatedUserMerchantRouteImport
       parentRoute: typeof AuthenticatedUserRoute
     }
     '/_authenticated/admin/produk-het/': {
@@ -438,12 +438,12 @@ const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedUserRouteChildren {
-  AuthenticatedUserDashboardRoute: typeof AuthenticatedUserDashboardRoute
+  AuthenticatedUserMerchantRoute: typeof AuthenticatedUserMerchantRoute
   AuthenticatedUserIndexRoute: typeof AuthenticatedUserIndexRoute
 }
 
 const AuthenticatedUserRouteChildren: AuthenticatedUserRouteChildren = {
-  AuthenticatedUserDashboardRoute: AuthenticatedUserDashboardRoute,
+  AuthenticatedUserMerchantRoute: AuthenticatedUserMerchantRoute,
   AuthenticatedUserIndexRoute: AuthenticatedUserIndexRoute,
 }
 
