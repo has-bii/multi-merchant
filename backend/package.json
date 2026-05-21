@@ -18,9 +18,11 @@
   },
   "devDependencies": {
     "@hono/node-server": "^2.0.3",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^25.9.0",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
+    "prettier": "^3.8.3",
     "tsx": "^4.22.2",
     "typescript": "^6.0.3"
   },
