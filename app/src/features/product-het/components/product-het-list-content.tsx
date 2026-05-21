@@ -2,36 +2,42 @@ import { DataTablePagination } from "@/components/data-table-pagination"
 import { Button } from "@/components/ui/button"
 import { ProductHetDeleteDialog } from "@/features/product-het/components/product-het-delete-dialog"
 import { ProductHetTable } from "@/features/product-het/components/product-het-table"
-import {
-  useBulkDeleteProductHet,
-  useDeleteProductHet,
-} from "@/features/product-het/hooks/use-product-het-delete"
+import { useDeleteProductHet } from "@/features/product-het/hooks/use-product-het-delete"
+import { useProductHetSelection } from "@/features/product-het/hooks/use-product-het-selection"
 import { getProductHetQueryOptions } from "@/features/product-het/queries/product-het.queries"
 import type { ProductHetSearch } from "@/features/product-het/schemas/product-het.schema"
+import { useListState } from "@/hooks/use-list-state"
 
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { Trash2 } from "lucide-react"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
-interface ProductHetListContentProps {
-  params: ProductHetSearch
-  update: (partial: Partial<ProductHetSearch>) => void
-}
+type DeleteTarget =
+  | { type: "single"; id: string }
+  | { type: "bulk" }
 
-export function ProductHetListContent({ params, update }: ProductHetListContentProps) {
+export function ProductHetListContent() {
+  const searchParams = useSearch({ from: "/_authenticated/admin/produk-het/" })
+  const navigate = useNavigate({ from: "/admin/produk-het/" })
+
   const queryClient = useQueryClient()
 
-  const { data } = useSuspenseQuery(getProductHetQueryOptions(params))
+  const { data } = useSuspenseQuery(getProductHetQueryOptions(searchParams))
 
-  // Selection state
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [deleteTarget, setDeleteTarget] = useState<{ type: "single" | "bulk"; id?: string } | null>(
-    null,
-  )
+  const { selectedIds, toggleSelect, toggleAll, removeSelected, clearSelection } =
+    useProductHetSelection(data.data)
+
+  const { params, update } = useListState({
+    params: searchParams,
+    onUpdate: (next) => navigate({ search: next, replace: true }),
+    onReset: clearSelection,
+  })
+
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null)
 
   const deleteMutation = useDeleteProductHet()
-  const bulkDeleteMutation = useBulkDeleteProductHet()
 
   // Prefetch next page
   const nextPage = params.page + 1
@@ -44,42 +50,22 @@ export function ProductHetListContent({ params, update }: ProductHetListContentP
     update({ orderBy, order: newOrder })
   }
 
-  const toggleSelect = useCallback((id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }, [])
-
-  const toggleAll = useCallback(() => {
-    setSelectedIds((prev) => {
-      if (prev.size === data.data.length) return new Set()
-      return new Set(data.data.map((p) => p.id))
-    })
-  }, [data.data])
-
-  const handleSingleDelete = useCallback((id: string) => {
+  const handleSingleDelete = (id: string) => {
     setDeleteTarget({ type: "single", id })
-  }, [])
+  }
 
-  const handleBulkDelete = useCallback(() => {
+  const handleBulkDelete = () => {
     setDeleteTarget({ type: "bulk" })
-  }, [])
+  }
 
-  const handleConfirmDelete = useCallback(() => {
+  const handleConfirmDelete = () => {
     if (!deleteTarget) return
 
-    if (deleteTarget.type === "single" && deleteTarget.id) {
+    if (deleteTarget.type === "single") {
       deleteMutation.mutate(deleteTarget.id, {
         onSuccess: () => {
           toast.success("Produk berhasil dihapus")
-          setSelectedIds((prev) => {
-            const next = new Set(prev)
-            next.delete(deleteTarget.id!)
-            return next
-          })
+          removeSelected(deleteTarget.id)
           setDeleteTarget(null)
         },
         onError: (err) => {
@@ -87,12 +73,12 @@ export function ProductHetListContent({ params, update }: ProductHetListContentP
           setDeleteTarget(null)
         },
       })
-    } else if (deleteTarget.type === "bulk") {
+    } else {
       const ids = Array.from(selectedIds)
-      bulkDeleteMutation.mutate(ids, {
+      deleteMutation.mutate(ids, {
         onSuccess: () => {
           toast.success(`${ids.length} produk berhasil dihapus`)
-          setSelectedIds(new Set())
+          clearSelection()
           setDeleteTarget(null)
         },
         onError: (err) => {
@@ -101,16 +87,16 @@ export function ProductHetListContent({ params, update }: ProductHetListContentP
         },
       })
     }
-  }, [deleteTarget, selectedIds, deleteMutation, bulkDeleteMutation])
+  }
 
-  const isPending = deleteMutation.isPending || bulkDeleteMutation.isPending
+  const isPending = deleteMutation.isPending
   const dialogCount = deleteTarget?.type === "bulk" ? selectedIds.size : 1
 
   return (
     <div className="space-y-4">
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-3 rounded-md border bg-muted/50 px-4 py-2">
-          <span className="text-sm text-muted-foreground">{selectedIds.size} dipilih</span>
+        <div className="bg-muted/50 flex items-center gap-3 rounded-md border px-4 py-2">
+          <span className="text-muted-foreground text-sm">{selectedIds.size} dipilih</span>
           <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
             <Trash2 className="size-4" />
             Hapus
@@ -122,9 +108,11 @@ export function ProductHetListContent({ params, update }: ProductHetListContentP
         data={data.data}
         searchParams={params}
         onSortChange={toggleSort}
-        selectedIds={selectedIds}
-        onToggleSelect={toggleSelect}
-        onToggleAll={toggleAll}
+        selection={{
+          selectedIds,
+          onToggleSelect: toggleSelect,
+          onToggleAll: toggleAll,
+        }}
         onDelete={handleSingleDelete}
       />
 

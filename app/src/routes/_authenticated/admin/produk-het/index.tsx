@@ -46,7 +46,7 @@ function RouteComponent() {
       </div>
 
       <QueryBoundary loadingFallback={<TableSkeleton columns={4} rows={params.limit} />}>
-        <ProductHetListContent params={params} update={update} />
+        <ProductHetListContent />
       </QueryBoundary>
     </div>
   )

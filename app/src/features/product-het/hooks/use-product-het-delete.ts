@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { productHetKeys } from "@/features/product-het/queries/product-het.queries"
 import { productHetClient } from "@/lib/api/product-het"
 
@@ -8,23 +7,14 @@ export function useDeleteProductHet() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      const res = await productHetClient[":id"].$delete({ param: { id } })
-      if (!res.ok) throw new Error("Gagal menghapus produk")
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: productHetKeys.all })
-    },
-  })
-}
-
-export function useBulkDeleteProductHet() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (ids: string[]) => {
-      const res = await productHetClient["bulk-delete"].$post({ json: { ids } })
-      if (!res.ok) throw new Error("Gagal menghapus produk")
+    mutationFn: async (idOrIds: string | string[]) => {
+      if (typeof idOrIds === "string") {
+        const res = await productHetClient[":id"].$delete({ param: { id: idOrIds } })
+        if (!res.ok) throw new Error("Gagal menghapus produk")
+      } else {
+        const res = await productHetClient["bulk-delete"].$post({ json: { ids: idOrIds } })
+        if (!res.ok) throw new Error("Gagal menghapus produk")
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: productHetKeys.all })
