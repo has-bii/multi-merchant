@@ -1,6 +1,7 @@
 import { merchantClient } from "@/lib/api/merchant"
 
-import { queryOptions, useMutation } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import type { MerchantFormValues, MerchantSearch } from "../schemas/merchant.schema"
 
@@ -59,11 +60,27 @@ export function useCreateMerchantMutation() {
   return useMutation({
     mutationFn: async (data: MerchantFormValues) => {
       const res = await merchantClient.index.$post({ json: data })
+      if (!res.ok) throw new Error("Gagal membuat merchant")
       return res.json()
     },
     onSuccess: () => {
       // Invalidate query is handled on step-success.tsx
       // queryClient.invalidateQueries({ queryKey: merchantKeys.byUser() })
+    },
+  })
+}
+
+export function useUpdateMerchantMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (data: MerchantFormValues) => {
+      const res = await merchantClient.index.$put({ json: data })
+      if (!res.ok) throw new Error("Gagal memperbarui merchant")
+      return res.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: merchantKeys.byUser() })
+      toast.success("Merchant berhasil diperbarui")
     },
   })
 }

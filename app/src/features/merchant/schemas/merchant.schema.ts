@@ -20,7 +20,7 @@ export const merchantFormSchema = z.object({
     .min(1, "Telepon wajib diisi")
     .regex(/^08\d{8,12}$/, "Nomor telepon harus diawali 08 dan panjang 10-14 karakter"),
   address: z.string().min(1, "Alamat wajib diisi"),
-  description: z.string().optional(),
+  description: z.string(),
 })
 
 export type MerchantFormValues = z.infer<typeof merchantFormSchema>

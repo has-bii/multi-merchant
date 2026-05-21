@@ -1,3 +1,4 @@
+import { MerchantDetailForm } from "@/features/merchant/components/merchant-detail-form"
 import { getMerchantByUserQueryOptions } from "@/features/merchant/queries/merchant.queries"
 
 import { useSuspenseQuery } from "@tanstack/react-query"
@@ -42,8 +43,8 @@ function RouteComponent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold">Detail Merchant</h1>
-      <p className="text-muted-foreground mt-2">Form detail merchant akan tersedia di Phase 3.</p>
+      <h1 className="text-2xl font-bold mb-4">Detail Merchant</h1>
+      <MerchantDetailForm key={merchant.updatedAt} />
     </div>
   )
 }
