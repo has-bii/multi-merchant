@@ -1,38 +1,13 @@
 # APP (Frontend) — PROJECT KNOWLEDGE BASE
 
-**Generated:** 2026-05-19
+**Updated:** 2026-05-21
 
-## STRUCTURE
-```
-app/
-├── src/
-│   ├── routes/             # TanStack Router file-based routes
-│   │   ├── __root.tsx
-│   │   ├── _authenticated.tsx    # Auth guard layout
-│   │   ├── _authenticated/index.tsx
-│   │   ├── _auth.tsx            # Unauthenticated layout
-│   │   └── _auth/login.tsx
-│   ├── features/           # Feature modules (schemas, components, hooks)
-│   │   └── auth/
-│   ├── components/ui/     # shadcn/ui components
-│   ├── lib/                # Utilities + auth client
-│   │   ├── utils.ts
-│   │   └── auth-client.ts
-│   ├── auth.tsx            # AuthProvider context
-│   ├── app.tsx             # App root (AuthProvider → RouterProvider)
-│   ├── main.tsx            # Entry point
-│   ├── router.tsx          # Router config
-│   ├── routeTree.gen.ts    # Auto-generated route tree
-│   ├── types.ts            # Router context types
-│   └── styles.css          # Tailwind + shadcn theme
-├── components.json         # shadcn config (radix-vega style)
-├── vite.config.ts          # Vite + React Compiler + Tailwind + TanStack Router plugin
-├── eslint.config.js        # @tanstack/eslint-config
-├── .prettierrc              # Prettier + import sorting
-└── tsconfig.json            # Strict, ES2022, @/* paths
-```
+## OVERVIEW
+
+React 19 · TanStack Router · TanStack Query · TanStack Form · Zod v4 · shadcn/ui · Tailwind CSS v4 · React Compiler · Vite 8 · TypeScript 6
 
 ## COMMANDS
+
 | Action | Command |
 |--------|---------|
 | Install | `pnpm install` |
@@ -40,29 +15,40 @@ app/
 | Build | `pnpm build` |
 | Test | `pnpm test` (vitest) |
 | Lint | `pnpm lint` |
-| Format | `pnpm format` |
 
-## CODING STANDARDS
-- **Language**: TypeScript (strict mode, `noUnusedLocals`, `noUnusedParameters`, `verbatimModuleSyntax`)
-- **Style**: Prettier (`printWidth: 100`, `semi: false`) + `@trivago/prettier-plugin-sort-imports`
-- **Lint**: `@tanstack/eslint-config`
-- **Imports**: Path alias `@/*` → `./src/*`
-- **Framework**: TanStack Router file-based routing, route context for auth, feature-folder structure
-- **UI**: shadcn/ui (radix-vega style), Tailwind CSS v4, Inter Variable font
-- **Validation**: Zod v4 (import from `zod/v4`)
-- **React Compiler**: Enabled via `babel-plugin-react-compiler`
+## ARCHITECTURE
 
-## WHERE TO LOOK
-- **Routes**: `src/routes/`
-- **Features**: `src/features/`
-- **UI components**: `src/components/ui/`
-- **Auth client**: `src/lib/auth-client.ts`
-- **Auth provider**: `src/auth.tsx`
-- **Router config**: `src/router.tsx`
+- **Auth**: `AuthProvider` → `RouterProvider`. Two-level guard: `_authenticated` (isAuthenticated) → `_authenticated/admin` (role check).
+- **Routing**: File-based (TanStack Router). Auto-generated `routeTree.gen.ts`. Run dev server to regenerate.
+- **Data fetching**: `queryOptions` + `useSuspenseQuery` + `QueryBoundary`. Mutations invalidate key factory.
+- **Forms**: Schema → hook → component. `validators: { onSubmit: schema }` only. Never `onChange`.
+- **API clients**: `createHonoClient<T>()` per feature. Backend types imported from `backend/` package.
+- **React Compiler**: Active. No manual `useMemo`/`useCallback`.
+- **UI strings**: Indonesian.
 
-## NOTES
-- **Auth flow**: `AuthProvider` wraps `RouterProvider`. Authenticated routes check `context.auth.isAuthenticated` in `beforeLoad`, redirect to `/login`.
-- **React Compiler**: Active. Auto-optimizes re-renders. Don't wrap with `useMemo`/`useCallback` unnecessarily.
-- **TanStack Router**: Route tree auto-generated (`routeTree.gen.ts`). Run dev server to regenerate after route file changes.
-- **Language**: UI strings in Indonesian (e.g., validation messages: "Email tidak valid", "Password minimal 6 karakter").
-- **Monorepo**: Separate `pnpm-lock.yaml`, `package.json`, `.env`. Run commands from `app/` directory.
+## DOCUMENTATION
+
+Detailed conventions and patterns live in `docs/`:
+
+- [Feature Modules](./docs/feature-modules.md) — folder structure, naming, scaffolding checklist
+- [Routing](./docs/routing.md) — file-based routing, layouts, auth guards, search params
+- [Forms](./docs/forms.md) — schema → hook → component pattern, field rendering
+- [Data Fetching](./docs/data-fetching.md) — query options, mutations, QueryBoundary, URL sync
+- [API Clients](./docs/api-clients.md) — Hono client factory, backend type imports
+- [Components](./docs/components.md) — component conventions, shadcn/ui, shared component catalog
+- [Styling](./docs/styling.md) — Tailwind v4, container queries, Prettier, ESLint, import order
+
+## KEY PATHS
+
+| Concern | Path |
+|---------|------|
+| Routes | `src/routes/` |
+| Features | `src/features/` |
+| Shared components | `src/components/` |
+| shadcn/ui | `src/components/ui/` |
+| API clients | `src/lib/api/` |
+| Auth client | `src/lib/auth-client.ts` |
+| Auth provider | `src/auth.tsx` |
+| Router config | `src/router.tsx` |
+| Query client | `src/lib/query-client.ts` |
+| Format utilities | `src/lib/format.ts` |
