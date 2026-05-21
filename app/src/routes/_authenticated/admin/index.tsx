@@ -1,3 +1,5 @@
+import { Header, HeaderCenter, HeaderLeft, HeaderRight, HeaderTitle } from "@/components/header"
+
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -6,9 +8,15 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 
 function RouteComponent() {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Admin Home</h1>
-      <p className="text-muted-foreground mt-2">Welcome to the admin area.</p>
+    <div className="space-y-4">
+      <Header>
+        <HeaderLeft>
+          <HeaderTitle>Admin Home</HeaderTitle>
+        </HeaderLeft>
+        <HeaderCenter />
+        <HeaderRight />
+      </Header>
+      <p className="text-muted-foreground px-4">Welcome to the admin area.</p>
     </div>
   )
 }

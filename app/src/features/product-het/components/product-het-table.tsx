@@ -20,7 +20,7 @@ import { formatDate, formatPrice } from "@/lib/format"
 
 import { Link } from "@tanstack/react-router"
 import type { ProductHetListItem } from "backend/product-het"
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react"
+import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 
 import type { ProductHetSearch } from "../schemas/product-het.schema"
 
@@ -96,7 +96,16 @@ export function ProductHetTable(props: ProductHetTableProps) {
                   />
                 </TableCell>
               )}
-              <TableCell className="px-5 font-medium capitalize">{product.name}</TableCell>
+              <TableCell className="px-5 font-medium capitalize">
+                <Link
+                  to="/admin/produk-het/$id/edit"
+                  params={{ id: product.id }}
+                  className="inline-flex items-center gap-1.5 hover:underline"
+                >
+                  {product.name}
+                  <ExternalLink className="size-3.5" />
+                </Link>
+              </TableCell>
               <TableCell className="px-5">{formatPrice(product.price)}</TableCell>
               <TableCell className="px-5">{formatDate(product.createdAt)}</TableCell>
               <TableCell className="px-5">{formatDate(product.updatedAt)}</TableCell>
