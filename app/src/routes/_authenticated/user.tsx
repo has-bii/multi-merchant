@@ -1,9 +1,10 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { UserSidebar } from "@/components/user-sidebar"
+import { MerchantCreationWizard } from "@/features/merchant/components/merchant-wizard"
 import { getMerchantByUserQueryOptions } from "@/features/merchant/queries/merchant.queries"
 
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { ErrorComponent, Outlet, createFileRoute, redirect } from "@tanstack/react-router"
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authenticated/user")({
   beforeLoad: ({ context, location }) => {
@@ -44,12 +45,7 @@ function RouteComponent() {
   const { data: merchant } = useSuspenseQuery(getMerchantByUserQueryOptions())
 
   if (!merchant) {
-    // Placeholder — Wizard creation di Phase 2
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">Buat merchant terlebih dahulu.</p>
-      </div>
-    )
+    return <MerchantCreationWizard />
   }
 
   return (

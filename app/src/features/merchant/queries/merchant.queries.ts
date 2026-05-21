@@ -1,9 +1,8 @@
-import { queryOptions } from "@tanstack/react-query"
-
 import { merchantClient } from "@/lib/api/merchant"
-import type { MerchantDetailResponse, MerchantListResponse } from "backend/merchant"
 
-import type { MerchantSearch } from "../schemas/merchant.schema"
+import { queryOptions, useMutation } from "@tanstack/react-query"
+
+import type { MerchantFormValues, MerchantSearch } from "../schemas/merchant.schema"
 
 export const merchantKeys = {
   all: ["merchant"] as const,
@@ -26,7 +25,7 @@ export function getMerchantListQueryOptions(params: MerchantSearch) {
         },
       })
       if (!res.ok) throw new Error("Gagal memuat data merchant")
-      return (await res.json()) as MerchantListResponse
+      return await res.json()
     },
   })
 }
@@ -37,7 +36,7 @@ export function getMerchantDetailQueryOptions(id: string) {
     queryFn: async () => {
       const res = await merchantClient[":id"].$get({ param: { id } })
       if (!res.ok) throw new Error("Gagal memuat detail merchant")
-      return (await res.json()) as MerchantDetailResponse
+      return await res.json()
     },
   })
 }
@@ -51,7 +50,20 @@ export function getMerchantByUserQueryOptions() {
         if (res.status === 404) return null
         throw new Error("Gagal memuat data merchant")
       }
-      return (await res.json()) as MerchantDetailResponse
+      return await res.json()
+    },
+  })
+}
+
+export function useCreateMerchantMutation() {
+  return useMutation({
+    mutationFn: async (data: MerchantFormValues) => {
+      const res = await merchantClient.index.$post({ json: data })
+      return res.json()
+    },
+    onSuccess: () => {
+      // Invalidate query is handled on step-success.tsx
+      // queryClient.invalidateQueries({ queryKey: merchantKeys.byUser() })
     },
   })
 }
