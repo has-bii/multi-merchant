@@ -5,6 +5,7 @@ import { logger } from "hono/logger"
 import { env } from "./config/env.js"
 import { type AuthType, auth } from "./lib/auth.js"
 import { sessionMiddleware } from "./middlewares/session.js"
+import { merchantRoute } from "./modules/merchant/index.js"
 import { productHetRoute } from "./modules/product-het/index.js"
 import { userRoute } from "./modules/user/index.js"
 
@@ -32,6 +33,7 @@ app.on(["POST", "GET"], "/auth/*", (c) => {
 // Protected routes — session middleware applies
 const api = new Hono<{ Variables: AuthType }>()
 api.use("*", sessionMiddleware)
+api.route("/merchant", merchantRoute)
 api.route("/product-het", productHetRoute)
 api.route("/user", userRoute)
 

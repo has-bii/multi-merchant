@@ -21,3 +21,14 @@ export const requireAdmin = createMiddleware<{ Variables: AuthType }>(async (c, 
   }
   await next()
 })
+
+export const requireUser = createMiddleware<{ Variables: AuthType }>(async (c, next) => {
+  const user = c.get("user")
+  if (!user) {
+    throw new HTTPException(401, { message: "Silakan login terlebih dahulu" })
+  }
+  if (user.role !== "user") {
+    throw new HTTPException(403, { message: "Akses ditolak" })
+  }
+  await next()
+})

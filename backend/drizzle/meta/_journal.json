@@ -15,6 +15,13 @@
       "when": 1779122215217,
       "tag": "0001_fluffy_medusa",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779386871550,
+      "tag": "0002_mysterious_kang",
+      "breakpoints": true
     }
   ]
 }

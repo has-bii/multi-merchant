@@ -89,6 +89,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  merchants: many(merchant),
 }))
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -117,3 +118,36 @@ export const productHets = pgTable("productHets", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+
+export const merchant = pgTable(
+  "merchant",
+  {
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuid_generate_v7()`),
+    name: text("name").notNull().unique(),
+    userId: uuid("userId")
+      .notNull()
+      .unique()
+      .references(() => user.id, { onDelete: "cascade" }),
+    phone: text("phone").notNull(),
+    address: text("address").notNull(),
+    description: text("description"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("merchant_userId_idx").on(table.userId),
+    index("merchant_name_idx").on(table.name),
+  ],
+)
+
+export const merchantRelations = relations(merchant, ({ one }) => ({
+  user: one(user, {
+    fields: [merchant.userId],
+    references: [user.id],
+  }),
+}))
