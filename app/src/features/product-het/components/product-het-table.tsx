@@ -56,7 +56,7 @@ export function ProductHetTable(props: ProductHetTableProps) {
         <TableHeader>
           <TableRow>
             {selection && (
-              <TableHead className="w-12">
+              <TableHead>
                 <Checkbox
                   checked={allSelected}
                   onCheckedChange={selection.onToggleAll}
@@ -96,7 +96,7 @@ export function ProductHetTable(props: ProductHetTableProps) {
                   />
                 </TableCell>
               )}
-              <TableCell className="px-5 font-medium capitalize">
+              <TableCell className="font-medium capitalize">
                 <Link
                   to="/admin/produk-het/$id/edit"
                   params={{ id: product.id }}
@@ -106,9 +106,13 @@ export function ProductHetTable(props: ProductHetTableProps) {
                   <ExternalLink className="size-3.5" />
                 </Link>
               </TableCell>
-              <TableCell className="px-5">{formatPrice(product.price)}</TableCell>
-              <TableCell className="px-5">{formatDate(product.createdAt)}</TableCell>
-              <TableCell className="px-5">{formatDate(product.updatedAt)}</TableCell>
+              <TableCell>{formatPrice(product.price)}</TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatDate(product.createdAt)}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatDate(product.updatedAt)}
+              </TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

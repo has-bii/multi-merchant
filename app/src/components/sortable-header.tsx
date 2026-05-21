@@ -20,7 +20,7 @@ export function SortableHeader<TField extends string>({
   const isActive = currentOrderBy === field
 
   return (
-    <Button variant="ghost" size="sm" onClick={() => onSortChange(field)}>
+    <Button role="button" variant="ghost" size="sm" onClick={() => onSortChange(field)}>
       <span>{label}</span>
       {!isActive ? <ArrowUpDown /> : currentOrder === "asc" ? <ArrowUp /> : <ArrowDown />}
     </Button>

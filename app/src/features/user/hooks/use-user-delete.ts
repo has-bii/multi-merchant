@@ -9,7 +9,10 @@ export function useDeleteUser() {
   return useMutation({
     mutationFn: async (id: string) => {
       const res = await userClient[":id"].$delete({ param: { id } })
-      if (!res.ok) throw new Error("Gagal menghapus pengguna")
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Gagal menghapus pengguna")
+        throw new Error(text)
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.all })
