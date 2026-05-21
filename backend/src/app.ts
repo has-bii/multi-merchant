@@ -6,6 +6,7 @@ import { env } from "./config/env.js"
 import { type AuthType, auth } from "./lib/auth.js"
 import { sessionMiddleware } from "./middlewares/session.js"
 import { productHetRoute } from "./modules/product-het/index.js"
+import { userRoute } from "./modules/user/index.js"
 
 const app = new Hono<{ Variables: AuthType }>().basePath("/api")
 
@@ -32,6 +33,7 @@ app.on(["POST", "GET"], "/auth/*", (c) => {
 const api = new Hono<{ Variables: AuthType }>()
 api.use("*", sessionMiddleware)
 api.route("/product-het", productHetRoute)
+api.route("/user", userRoute)
 
 app.route("/", api)
 

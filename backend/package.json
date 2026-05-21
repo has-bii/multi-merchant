@@ -2,7 +2,8 @@
   "name": "backend",
   "type": "module",
   "exports": {
-    "./product-het": "./src/modules/product-het/index.ts"
+    "./product-het": "./src/modules/product-het/index.ts",
+    "./user": "./src/modules/user/index.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.11",
