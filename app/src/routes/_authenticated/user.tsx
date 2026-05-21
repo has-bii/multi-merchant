@@ -1,3 +1,4 @@
+import { PageSkeleton } from "@/components/page-skeleton"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { UserSidebar } from "@/components/user-sidebar"
 import { MerchantCreationWizard } from "@/features/merchant/components/merchant-wizard"
@@ -17,11 +18,7 @@ export const Route = createFileRoute("/_authenticated/user")({
     }
   },
   loader: ({ context }) => context.queryClient.ensureQueryData(getMerchantByUserQueryOptions()),
-  pendingComponent: () => (
-    <div className="flex min-h-screen items-center justify-center">
-      <p className="text-muted-foreground">Memuat...</p>
-    </div>
-  ),
+  pendingComponent: PageSkeleton,
   errorComponent: ({ error, reset }) => {
     return (
       <div className="flex min-h-screen items-center justify-center">

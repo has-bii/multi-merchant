@@ -1,3 +1,5 @@
+import { PageSkeleton } from "@/components/page-skeleton"
+
 import type { ReactNode } from "react"
 import { createContext, useContext, useMemo } from "react"
 
@@ -16,12 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isAuthenticated = useMemo(() => !!session?.user, [session])
 
-  if (isPending)
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    )
+  if (isPending) return <PageSkeleton />
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user: session ? session.user : null }}>
