@@ -98,3 +98,39 @@ export function PageSkeleton() {
     </SidebarProvider>
   )
 }
+
+export function PageContentSkeleton() {
+  return (
+    <MainPage>
+      <Header>
+        <HeaderLeft>
+          <Skeleton className="h-9 w-9 rounded-md @lg/main:hidden" />
+          <Skeleton className="hidden h-8 w-32 @lg/main:flex" />
+        </HeaderLeft>
+        <HeaderCenter className="@lg/main:hidden">
+          <Skeleton className="h-8 w-full" />
+        </HeaderCenter>
+      </Header>
+
+      <MainPageContent>
+        <div className="flex items-center justify-between gap-4">
+          <Skeleton className="h-9 w-64" />
+          <div className="inline-flex items-center gap-2">
+            <Skeleton className="h-9 w-20" />
+            <Skeleton className="h-9 w-20" />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-64 w-full" />
+          <div className="flex gap-3">
+            <Skeleton className="h-32 flex-1" />
+            <Skeleton className="h-32 flex-1" />
+            <Skeleton className="h-32 flex-1" />
+          </div>
+          <Skeleton className="h-48 w-full" />
+        </div>
+      </MainPageContent>
+    </MainPage>
+  )
+}

@@ -1,3 +1,12 @@
+import {
+  Header,
+  HeaderBack,
+  HeaderBreadcrumb,
+  HeaderCenter,
+  HeaderLeft,
+  HeaderTitle,
+} from "@/components/header"
+import { MainPage, MainPageContent } from "@/components/main-page"
 import { MerchantDetailForm } from "@/features/merchant/components/merchant-detail-form"
 import { getMerchantByUserQueryOptions } from "@/features/merchant/queries/merchant.queries"
 
@@ -5,46 +14,34 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authenticated/user/merchant")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(getMerchantByUserQueryOptions()),
-  pendingComponent: () => (
-    <div className="flex min-h-32 items-center justify-center">
-      <p className="text-muted-foreground">Memuat detail merchant...</p>
-    </div>
-  ),
-  errorComponent: ({ error, reset }) => {
-    return (
-      <div className="p-6">
-        <div className="text-center">
-          <p className="text-destructive font-semibold">Gagal memuat detail merchant</p>
-          <p className="text-muted-foreground mt-1 text-sm">{error.message}</p>
-          <button
-            onClick={() => reset()}
-            className="mt-4 rounded-md bg-primary px-4 py-2 text-primary-foreground text-sm"
-          >
-            Coba Lagi
-          </button>
-        </div>
-      </div>
-    )
-  },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data: merchant } = useSuspenseQuery(getMerchantByUserQueryOptions())
+  const { data } = useSuspenseQuery(getMerchantByUserQueryOptions())
 
-  if (!merchant) {
-    return (
-      <div className="p-6">
-        <p className="text-muted-foreground">Anda belum memiliki merchant.</p>
-      </div>
-    )
-  }
+  const merchant = data!
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Detail Merchant</h1>
-      <MerchantDetailForm key={merchant.updatedAt} />
-    </div>
+    <MainPage>
+      <Header>
+        <HeaderLeft>
+          <HeaderBack className="@lg/main:hidden" linkOptions={{ to: ".." }} />
+          <HeaderBreadcrumb
+            className="hidden @lg/main:flex"
+            items={[{ label: "Dashboard", to: ".." }, { label: "Detail Merchant" }]}
+          />
+        </HeaderLeft>
+        <HeaderCenter className="@lg/main:hidden">
+          <HeaderTitle>Detail Merchant</HeaderTitle>
+        </HeaderCenter>
+      </Header>
+      <MainPageContent>
+        <div>
+          <h1 className="mb-4 text-2xl font-bold">Detail Merchant</h1>
+          <MerchantDetailForm merchant={data!} />
+        </div>
+      </MainPageContent>
+    </MainPage>
   )
 }

@@ -5,27 +5,17 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 import { useForm } from "@tanstack/react-form"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import type { MerchantDetailResponse } from "backend/merchant"
 import { useState } from "react"
 
-import {
-  getMerchantByUserQueryOptions,
-  useUpdateMerchantMutation,
-} from "../queries/merchant.queries"
+import { useUpdateMerchantMutation } from "../queries/merchant.queries"
 import { merchantFormSchema } from "../schemas/merchant.schema"
 
-export function MerchantDetailForm() {
-  const { data: merchant } = useSuspenseQuery(getMerchantByUserQueryOptions())
-
-  if (!merchant) {
-    return <p className="text-muted-foreground">Anda belum memiliki merchant.</p>
-  }
-
-  return <MerchantDetailFormInner merchant={merchant} />
+interface Props {
+  merchant: MerchantDetailResponse
 }
 
-function MerchantDetailFormInner({ merchant }: { merchant: MerchantDetailResponse }) {
+export function MerchantDetailForm({ merchant }: Props) {
   const updateMutation = useUpdateMerchantMutation()
   const [error, setError] = useState("")
 
