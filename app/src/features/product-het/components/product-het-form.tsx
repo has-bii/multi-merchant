@@ -69,7 +69,7 @@ export function ProductHetForm({ initialData }: ProductHetFormProps) {
                   inputMode="numeric"
                   value={field.state.value ? formatPriceString(Number(field.state.value)) : ""}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(formatPriceNumber(e.target.value).toString())}
+                  onChange={(e) => field.handleChange(formatPriceNumber(e.target.value))}
                   data-invalid={isInvalid}
                   placeholder="0"
                   autoComplete="off"

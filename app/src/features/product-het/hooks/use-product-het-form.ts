@@ -1,9 +1,11 @@
-import { productHetClient } from "@/lib/api/product-het"
 import { productHetKeys } from "@/features/product-het/queries/product-het.queries"
+import { productHetClient } from "@/lib/api/product-het"
+
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
+
 import { productHetFormSchema } from "../schemas/product-het-form.schema"
 
 interface UseProductHetFormOptions {
@@ -50,24 +52,19 @@ export function useProductHetForm({ initialData }: UseProductHetFormOptions = {}
   const form = useForm({
     defaultValues: {
       name: initialData?.name ?? "",
-      price: initialData?.price != null ? String(initialData.price) : "",
+      price: initialData?.price ?? 0,
     },
     validators: {
-      onChange: ({ value }) => {
-        const result = productHetFormSchema.safeParse(value)
-        if (!result.success) return result.error.issues.map((i) => i.message)
-        return undefined
-      },
+      onSubmit: productHetFormSchema,
     },
     onSubmit: async ({ value }) => {
       try {
         setError("")
-        const parsed = productHetFormSchema.parse(value)
 
         if (isEdit) {
-          await updateMutation.mutateAsync(parsed)
+          await updateMutation.mutateAsync(value)
         } else {
-          await createMutation.mutateAsync(parsed)
+          await createMutation.mutateAsync(value)
         }
       } catch (e) {
         setError(e instanceof Error ? e.message : "Terjadi kesalahan")
