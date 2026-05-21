@@ -5,8 +5,8 @@ export const productHetFormSchema = z.object({
     .string()
     .min(1, { message: "Nama produk wajib diisi" })
     .transform((v) => v.trim().toLowerCase()),
-  price: z.coerce
-    .number<number>()
+  price: z
+    .number()
     .int({ message: "Harga harus bilangan bulat" })
     .positive({ message: "Harga harus lebih dari 0" }),
 })
