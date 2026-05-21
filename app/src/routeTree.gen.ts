@@ -24,6 +24,7 @@ import { Route as AuthenticatedAdminProdukHetIndexRouteImport } from './routes/_
 import { Route as AuthenticatedAdminPenggunaIndexRouteImport } from './routes/_authenticated/admin/pengguna/index'
 import { Route as AuthenticatedAdminProdukHetTambahRouteImport } from './routes/_authenticated/admin/produk-het/tambah'
 import { Route as AuthenticatedAdminProdukHetImportRouteImport } from './routes/_authenticated/admin/produk-het/import'
+import { Route as AuthenticatedAdminPenggunaTambahRouteImport } from './routes/_authenticated/admin/pengguna/tambah'
 import { Route as AuthenticatedAdminProdukHetIdEditRouteImport } from './routes/_authenticated/admin/produk-het/$id.edit'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -104,6 +105,12 @@ const AuthenticatedAdminProdukHetImportRoute =
     path: '/produk-het/import',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPenggunaTambahRoute =
+  AuthenticatedAdminPenggunaTambahRouteImport.update({
+    id: '/pengguna/tambah',
+    path: '/pengguna/tambah',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminProdukHetIdEditRoute =
   AuthenticatedAdminProdukHetIdEditRouteImport.update({
     id: '/produk-het/$id/edit',
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/user/': typeof AuthenticatedUserIndexRoute
+  '/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
   '/admin/pengguna/': typeof AuthenticatedAdminPenggunaIndexRoute
@@ -135,6 +143,7 @@ export interface FileRoutesByTo {
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/user': typeof AuthenticatedUserIndexRoute
+  '/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
   '/admin/pengguna': typeof AuthenticatedAdminPenggunaIndexRoute
@@ -154,6 +163,7 @@ export interface FileRoutesById {
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/user/': typeof AuthenticatedUserIndexRoute
+  '/_authenticated/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/_authenticated/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/_authenticated/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
   '/_authenticated/admin/pengguna/': typeof AuthenticatedAdminPenggunaIndexRoute
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/user/dashboard'
     | '/admin/'
     | '/user/'
+    | '/admin/pengguna/tambah'
     | '/admin/produk-het/import'
     | '/admin/produk-het/tambah'
     | '/admin/pengguna/'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/user/dashboard'
     | '/admin'
     | '/user'
+    | '/admin/pengguna/tambah'
     | '/admin/produk-het/import'
     | '/admin/produk-het/tambah'
     | '/admin/pengguna'
@@ -204,6 +216,7 @@ export interface FileRouteTypes {
     | '/_authenticated/user/dashboard'
     | '/_authenticated/admin/'
     | '/_authenticated/user/'
+    | '/_authenticated/admin/pengguna/tambah'
     | '/_authenticated/admin/produk-het/import'
     | '/_authenticated/admin/produk-het/tambah'
     | '/_authenticated/admin/pengguna/'
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProdukHetImportRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/pengguna/tambah': {
+      id: '/_authenticated/admin/pengguna/tambah'
+      path: '/pengguna/tambah'
+      fullPath: '/admin/pengguna/tambah'
+      preLoaderRoute: typeof AuthenticatedAdminPenggunaTambahRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/produk-het/$id/edit': {
       id: '/_authenticated/admin/produk-het/$id/edit'
       path: '/produk-het/$id/edit'
@@ -349,6 +369,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminPenggunaTambahRoute: typeof AuthenticatedAdminPenggunaTambahRoute
   AuthenticatedAdminProdukHetImportRoute: typeof AuthenticatedAdminProdukHetImportRoute
   AuthenticatedAdminProdukHetTambahRoute: typeof AuthenticatedAdminProdukHetTambahRoute
   AuthenticatedAdminPenggunaIndexRoute: typeof AuthenticatedAdminPenggunaIndexRoute
@@ -358,6 +379,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminPenggunaTambahRoute: AuthenticatedAdminPenggunaTambahRoute,
   AuthenticatedAdminProdukHetImportRoute:
     AuthenticatedAdminProdukHetImportRoute,
   AuthenticatedAdminProdukHetTambahRoute:

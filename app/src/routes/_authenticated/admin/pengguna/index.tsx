@@ -16,7 +16,7 @@ import { UserListContent } from "@/features/user/components/user-list-content"
 import { userSearchSchema } from "@/features/user/schemas/user.schema"
 import { useListState } from "@/hooks/use-list-state"
 
-import { createFileRoute } from "@tanstack/react-router"
+import { Link, createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authenticated/admin/pengguna/")({
   validateSearch: userSearchSchema,
@@ -60,7 +60,9 @@ function RouteComponent() {
             onChange={(search) => update({ search })}
             placeholder="Cari pengguna..."
           />
-          <Button disabled>Tambah</Button>
+          <Button asChild>
+            <Link to="/admin/pengguna/tambah">Tambah</Link>
+          </Button>
         </div>
 
         <QueryBoundary loadingFallback={<TableSkeleton columns={5} rows={params.limit} />}>
