@@ -3,7 +3,8 @@
   "type": "module",
   "exports": {
     "./product-het": "./src/modules/product-het/index.ts",
-    "./user": "./src/modules/user/index.ts"
+    "./user": "./src/modules/user/index.ts",
+    "./merchant": "./src/modules/merchant/index.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.11",

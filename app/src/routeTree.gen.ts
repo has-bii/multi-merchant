@@ -22,9 +22,11 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user/dashboard'
 import { Route as AuthenticatedAdminProdukHetIndexRouteImport } from './routes/_authenticated/admin/produk-het/index'
 import { Route as AuthenticatedAdminPenggunaIndexRouteImport } from './routes/_authenticated/admin/pengguna/index'
+import { Route as AuthenticatedAdminMerchantIndexRouteImport } from './routes/_authenticated/admin/merchant/index'
 import { Route as AuthenticatedAdminProdukHetTambahRouteImport } from './routes/_authenticated/admin/produk-het/tambah'
 import { Route as AuthenticatedAdminProdukHetImportRouteImport } from './routes/_authenticated/admin/produk-het/import'
 import { Route as AuthenticatedAdminPenggunaTambahRouteImport } from './routes/_authenticated/admin/pengguna/tambah'
+import { Route as AuthenticatedAdminMerchantIdRouteImport } from './routes/_authenticated/admin/merchant/$id'
 import { Route as AuthenticatedAdminProdukHetIdEditRouteImport } from './routes/_authenticated/admin/produk-het/$id.edit'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -93,6 +95,12 @@ const AuthenticatedAdminPenggunaIndexRoute =
     path: '/pengguna/',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminMerchantIndexRoute =
+  AuthenticatedAdminMerchantIndexRouteImport.update({
+    id: '/merchant/',
+    path: '/merchant/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminProdukHetTambahRoute =
   AuthenticatedAdminProdukHetTambahRouteImport.update({
     id: '/produk-het/tambah',
@@ -109,6 +117,12 @@ const AuthenticatedAdminPenggunaTambahRoute =
   AuthenticatedAdminPenggunaTambahRouteImport.update({
     id: '/pengguna/tambah',
     path: '/pengguna/tambah',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMerchantIdRoute =
+  AuthenticatedAdminMerchantIdRouteImport.update({
+    id: '/merchant/$id',
+    path: '/merchant/$id',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminProdukHetIdEditRoute =
@@ -128,9 +142,11 @@ export interface FileRoutesByFullPath {
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/user/': typeof AuthenticatedUserIndexRoute
+  '/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
   '/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
+  '/admin/merchant/': typeof AuthenticatedAdminMerchantIndexRoute
   '/admin/pengguna/': typeof AuthenticatedAdminPenggunaIndexRoute
   '/admin/produk-het/': typeof AuthenticatedAdminProdukHetIndexRoute
   '/admin/produk-het/$id/edit': typeof AuthenticatedAdminProdukHetIdEditRoute
@@ -143,9 +159,11 @@ export interface FileRoutesByTo {
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/user': typeof AuthenticatedUserIndexRoute
+  '/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
   '/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
+  '/admin/merchant': typeof AuthenticatedAdminMerchantIndexRoute
   '/admin/pengguna': typeof AuthenticatedAdminPenggunaIndexRoute
   '/admin/produk-het': typeof AuthenticatedAdminProdukHetIndexRoute
   '/admin/produk-het/$id/edit': typeof AuthenticatedAdminProdukHetIdEditRoute
@@ -163,9 +181,11 @@ export interface FileRoutesById {
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/user/': typeof AuthenticatedUserIndexRoute
+  '/_authenticated/admin/merchant/$id': typeof AuthenticatedAdminMerchantIdRoute
   '/_authenticated/admin/pengguna/tambah': typeof AuthenticatedAdminPenggunaTambahRoute
   '/_authenticated/admin/produk-het/import': typeof AuthenticatedAdminProdukHetImportRoute
   '/_authenticated/admin/produk-het/tambah': typeof AuthenticatedAdminProdukHetTambahRoute
+  '/_authenticated/admin/merchant/': typeof AuthenticatedAdminMerchantIndexRoute
   '/_authenticated/admin/pengguna/': typeof AuthenticatedAdminPenggunaIndexRoute
   '/_authenticated/admin/produk-het/': typeof AuthenticatedAdminProdukHetIndexRoute
   '/_authenticated/admin/produk-het/$id/edit': typeof AuthenticatedAdminProdukHetIdEditRoute
@@ -182,9 +202,11 @@ export interface FileRouteTypes {
     | '/user/dashboard'
     | '/admin/'
     | '/user/'
+    | '/admin/merchant/$id'
     | '/admin/pengguna/tambah'
     | '/admin/produk-het/import'
     | '/admin/produk-het/tambah'
+    | '/admin/merchant/'
     | '/admin/pengguna/'
     | '/admin/produk-het/'
     | '/admin/produk-het/$id/edit'
@@ -197,9 +219,11 @@ export interface FileRouteTypes {
     | '/user/dashboard'
     | '/admin'
     | '/user'
+    | '/admin/merchant/$id'
     | '/admin/pengguna/tambah'
     | '/admin/produk-het/import'
     | '/admin/produk-het/tambah'
+    | '/admin/merchant'
     | '/admin/pengguna'
     | '/admin/produk-het'
     | '/admin/produk-het/$id/edit'
@@ -216,9 +240,11 @@ export interface FileRouteTypes {
     | '/_authenticated/user/dashboard'
     | '/_authenticated/admin/'
     | '/_authenticated/user/'
+    | '/_authenticated/admin/merchant/$id'
     | '/_authenticated/admin/pengguna/tambah'
     | '/_authenticated/admin/produk-het/import'
     | '/_authenticated/admin/produk-het/tambah'
+    | '/_authenticated/admin/merchant/'
     | '/_authenticated/admin/pengguna/'
     | '/_authenticated/admin/produk-het/'
     | '/_authenticated/admin/produk-het/$id/edit'
@@ -322,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPenggunaIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/merchant/': {
+      id: '/_authenticated/admin/merchant/'
+      path: '/merchant'
+      fullPath: '/admin/merchant/'
+      preLoaderRoute: typeof AuthenticatedAdminMerchantIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/produk-het/tambah': {
       id: '/_authenticated/admin/produk-het/tambah'
       path: '/produk-het/tambah'
@@ -341,6 +374,13 @@ declare module '@tanstack/react-router' {
       path: '/pengguna/tambah'
       fullPath: '/admin/pengguna/tambah'
       preLoaderRoute: typeof AuthenticatedAdminPenggunaTambahRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/merchant/$id': {
+      id: '/_authenticated/admin/merchant/$id'
+      path: '/merchant/$id'
+      fullPath: '/admin/merchant/$id'
+      preLoaderRoute: typeof AuthenticatedAdminMerchantIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/produk-het/$id/edit': {
@@ -369,9 +409,11 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminMerchantIdRoute: typeof AuthenticatedAdminMerchantIdRoute
   AuthenticatedAdminPenggunaTambahRoute: typeof AuthenticatedAdminPenggunaTambahRoute
   AuthenticatedAdminProdukHetImportRoute: typeof AuthenticatedAdminProdukHetImportRoute
   AuthenticatedAdminProdukHetTambahRoute: typeof AuthenticatedAdminProdukHetTambahRoute
+  AuthenticatedAdminMerchantIndexRoute: typeof AuthenticatedAdminMerchantIndexRoute
   AuthenticatedAdminPenggunaIndexRoute: typeof AuthenticatedAdminPenggunaIndexRoute
   AuthenticatedAdminProdukHetIndexRoute: typeof AuthenticatedAdminProdukHetIndexRoute
   AuthenticatedAdminProdukHetIdEditRoute: typeof AuthenticatedAdminProdukHetIdEditRoute
@@ -379,11 +421,13 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminMerchantIdRoute: AuthenticatedAdminMerchantIdRoute,
   AuthenticatedAdminPenggunaTambahRoute: AuthenticatedAdminPenggunaTambahRoute,
   AuthenticatedAdminProdukHetImportRoute:
     AuthenticatedAdminProdukHetImportRoute,
   AuthenticatedAdminProdukHetTambahRoute:
     AuthenticatedAdminProdukHetTambahRoute,
+  AuthenticatedAdminMerchantIndexRoute: AuthenticatedAdminMerchantIndexRoute,
   AuthenticatedAdminPenggunaIndexRoute: AuthenticatedAdminPenggunaIndexRoute,
   AuthenticatedAdminProdukHetIndexRoute: AuthenticatedAdminProdukHetIndexRoute,
   AuthenticatedAdminProdukHetIdEditRoute:

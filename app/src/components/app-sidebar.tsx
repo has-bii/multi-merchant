@@ -14,7 +14,7 @@ import {
 import { NavUser } from "@/components/nav-user"
 
 import { Link, useLocation } from "@tanstack/react-router"
-import { BoxesIcon, LayoutDashboard, Package, Users } from "lucide-react"
+import { BoxesIcon, Building2, LayoutDashboard, Package, Users } from "lucide-react"
 
 const items = [
   {
@@ -31,6 +31,11 @@ const items = [
     title: "Pengguna",
     url: "/admin/pengguna",
     icon: Users,
+  },
+  {
+    title: "Merchant",
+    url: "/admin/merchant",
+    icon: Building2,
   },
 ]
 
