@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm"
-import { boolean, index, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
+import { boolean, index, numeric, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core"
 
 export const user = pgTable("user", {
   id: uuid("id")
@@ -145,9 +145,43 @@ export const merchant = pgTable(
   ],
 )
 
-export const merchantRelations = relations(merchant, ({ one }) => ({
+export const merchantRelations = relations(merchant, ({ one, many }) => ({
   user: one(user, {
     fields: [merchant.userId],
     references: [user.id],
   }),
+  products: many(products),
+}))
+
+export const products = pgTable(
+  "product",
+  {
+    id: uuid("id").primaryKey().default(sql`uuid_generate_v7()`),
+    price: numeric("price").notNull(),
+    merchantId: uuid("merchantId")
+      .notNull()
+      .references(() => merchant.id, { onDelete: "cascade" }),
+    productHetId: uuid("productHetId")
+      .notNull()
+      .references(() => productHets.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("product_merchantId_idx").on(table.merchantId),
+    index("product_productHetId_idx").on(table.productHetId),
+    unique("product_merchant_productHet_unique").on(table.merchantId, table.productHetId),
+  ],
+)
+
+export const productsRelations = relations(products, ({ one }) => ({
+  merchant: one(merchant, { fields: [products.merchantId], references: [merchant.id] }),
+  productHet: one(productHets, { fields: [products.productHetId], references: [productHets.id] }),
+}))
+
+export const productHetsRelations = relations(productHets, ({ many }) => ({
+  products: many(products),
 }))

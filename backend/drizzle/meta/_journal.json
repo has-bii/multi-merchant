@@ -22,6 +22,13 @@
       "when": 1779386871550,
       "tag": "0002_mysterious_kang",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779483124506,
+      "tag": "0003_clever_komodo",
+      "breakpoints": true
     }
   ]
 }
