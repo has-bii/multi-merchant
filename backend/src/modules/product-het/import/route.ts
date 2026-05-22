@@ -1,6 +1,6 @@
 import { bodyLimit } from "hono/body-limit"
 
-import * as service from "./service.js"
+import { ProductHetImportService } from "./service.js"
 import { createApp } from "../../../lib/typed-app.js"
 import { requireAdmin } from "../../../middlewares/auth.js"
 import { zValidator } from "../../../middlewares/validator.js"
@@ -20,7 +20,7 @@ export const importRoute = createApp()
     async (c) => {
       const parsed = c.req.valid("form")
 
-      return c.json(await service.previewImportProduct(parsed.file))
+      return c.json(await ProductHetImportService.preview(parsed.file))
     },
   )
   .post(
@@ -28,6 +28,6 @@ export const importRoute = createApp()
     requireAdmin,
     zValidator("json", importExecutePayloadSchema),
     async (c) => {
-      return c.json(await service.executeImportProduct(c.req.valid("json")))
+      return c.json(await ProductHetImportService.execute(c.req.valid("json")))
     },
   )

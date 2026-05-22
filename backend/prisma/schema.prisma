@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model user {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          String?
+  banned        Boolean?  @default(false)
+  banReason     String?
+  banExpires    DateTime?
+
+  sessions  session[]
+  accounts  account[]
+  merchants merchant[]
+  products  product[]
+}
+
+model session {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  expiresAt      DateTime
+  token          String   @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String   @db.Uuid
+  impersonatedBy String?
+
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model account {
+  id                    String    @id @default(uuid(7)) @db.Uuid
+  accountId             String
+  providerId            String
+  userId                String    @db.Uuid
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model verification {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+model merchant {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  name        String   @unique
+  userId      String   @unique @db.Uuid
+  phone       String
+  address     String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user     user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products product[]
+
+  @@index([userId])
+  @@index([name])
+}
+
+model productHets {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  name      String   @unique
+  price     Decimal  @db.Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products product[]
+}
+
+model product {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  price        Decimal  @db.Decimal
+  merchantId   String   @db.Uuid
+  userId       String   @db.Uuid
+  productHetId String   @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  merchant   merchant    @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  productHet productHets @relation(fields: [productHetId], references: [id], onDelete: Cascade)
+  user       user        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([merchantId, productHetId])
+  @@index([merchantId])
+  @@index([productHetId])
+}

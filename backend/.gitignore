@@ -31,3 +31,6 @@ lerna-debug.log*
 
 dist/
 .env*.local
+
+# prisma generated
+src/generated/

@@ -1,4 +1,4 @@
-import { drizzleAdapter } from "@better-auth/drizzle-adapter"
+import { prismaAdapter } from "better-auth/adapters/prisma"
 import { betterAuth } from "better-auth/minimal"
 import { admin } from "better-auth/plugins"
 
@@ -9,9 +9,8 @@ import { sendPasswordResetEmail } from "./email.js"
 export const auth = betterAuth({
   secret: env.AUTH.SECRET,
   baseURL: env.AUTH.URL,
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    camelCase: true,
+  database: prismaAdapter(db, {
+    provider: "postgresql",
   }),
   emailAndPassword: {
     enabled: true,

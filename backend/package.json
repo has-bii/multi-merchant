@@ -7,32 +7,39 @@
     "./merchant": "./src/modules/merchant/index.ts"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "^1.6.11",
     "@hono/zod-validator": "^0.8.0",
     "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "better-auth": "^1.6.11",
     "csv-parse": "^6.2.1",
-    "drizzle-orm": "^0.45.2",
     "hono": "^4.12.19",
+    "prisma": "^7.8.0",
     "resend": "^6.12.3",
+    "ws": "^8.20.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@hono/node-server": "^2.0.3",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/node": "^25.9.0",
+    "@types/ws": "^8.18.1",
     "dotenv": "^17.4.2",
-    "drizzle-kit": "^0.31.10",
     "prettier": "^3.8.3",
     "tsx": "^4.22.2",
     "typescript": "^6.0.3"
   },
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx src/db/seed.ts",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:migrate:prod": "npx prisma migrate deploy",
+    "db:studio": "npx prisma studio",
+    "db:seed": "npx prisma db seed",
+    "db:push": "npx prisma db push",
     "format": "prettier --write ."
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

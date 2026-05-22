@@ -63,8 +63,7 @@ export type GetProductHetQueryDto = z.infer<typeof getProductHetQuerySchema>
 ## Where DTOs Flow
 
 - **schema.ts** defines them via `z.infer`.
-- **repository.ts** accepts query DTOs as input (typed params).
-- **service.ts** accepts body/query DTOs, passes them to repository.
+- **service.ts** accepts body/query DTOs as function parameters. Calls `db` directly with Prisma.
 - **route.ts** validates requests against schemas, passes validated DTOs to service.
 
 ## When to Use `types.ts`

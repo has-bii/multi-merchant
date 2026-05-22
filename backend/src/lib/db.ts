@@ -1,8 +1,10 @@
-import { neon } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-http"
+import { PrismaNeon } from "@prisma/adapter-neon"
 
-import * as schema from "../db/schema.js"
+import { env } from "../config/env.js"
+import { PrismaClient } from "../generated/prisma/client.js"
 
-const sql = neon(process.env.DATABASE_URL!)
+const adapter = new PrismaNeon({
+  connectionString: env.DB.URL,
+})
 
-export const db = drizzle({ client: sql, schema })
+export const db = new PrismaClient({ adapter })
