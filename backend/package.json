@@ -36,7 +36,8 @@
     "db:studio": "npx prisma studio",
     "db:seed": "npx prisma db seed",
     "db:push": "npx prisma db push",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "npx prisma generate"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
