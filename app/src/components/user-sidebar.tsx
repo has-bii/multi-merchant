@@ -1,3 +1,4 @@
+import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -10,10 +11,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { NavUser } from "@/components/nav-user"
 
 import { Link, useLocation } from "@tanstack/react-router"
-import { BoxesIcon, Building2, LayoutDashboard } from "lucide-react"
+import { BoxesIcon, Building2, LayoutDashboard, Package } from "lucide-react"
 
 const items = [
   {
@@ -22,9 +22,14 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Detail Merchant",
+    title: "Merchant",
     url: "/user/merchant",
     icon: Building2,
+  },
+  {
+    title: "Products",
+    url: "/user/produk",
+    icon: Package,
   },
 ]
 
@@ -38,7 +43,7 @@ export function UserSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/user">
-                <div className="inline-flex items-center justify-center size-8 bg-primary text-primary-foreground rounded-lg">
+                <div className="bg-primary text-primary-foreground inline-flex size-8 items-center justify-center rounded-lg">
                   <BoxesIcon />
                 </div>
                 <span className="font-semibold">Multi Merchant</span>

@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { cors } from "hono/cors"
+import { HTTPException } from "hono/http-exception"
 import { logger } from "hono/logger"
 
 import { env } from "./config/env.js"
@@ -40,5 +41,13 @@ api.route("/product", productRoute)
 api.route("/user", userRoute)
 
 app.route("/", api)
+
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return c.json({ error: err.message }, err.status)
+  }
+
+  return c.json({ error: "Internal Server Error" }, 500)
+})
 
 export default app
