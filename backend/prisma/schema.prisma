@@ -113,7 +113,8 @@ model product {
   productHet productHets @relation(fields: [productHetId], references: [id], onDelete: Cascade)
   user       user        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([merchantId, productHetId])
+  @@unique([userId, productHetId])
+  @@index([userId])
   @@index([merchantId])
   @@index([productHetId])
 }

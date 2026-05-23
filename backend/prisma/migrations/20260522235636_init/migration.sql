@@ -130,13 +130,16 @@ CREATE INDEX "merchant_name_idx" ON "merchant"("name");
 CREATE UNIQUE INDEX "productHets_name_key" ON "productHets"("name");
 
 -- CreateIndex
+CREATE INDEX "product_userId_idx" ON "product"("userId");
+
+-- CreateIndex
 CREATE INDEX "product_merchantId_idx" ON "product"("merchantId");
 
 -- CreateIndex
 CREATE INDEX "product_productHetId_idx" ON "product"("productHetId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "product_merchantId_productHetId_key" ON "product"("merchantId", "productHetId");
+CREATE UNIQUE INDEX "product_userId_productHetId_key" ON "product"("userId", "productHetId");
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

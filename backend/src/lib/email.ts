@@ -4,13 +4,7 @@ import { env } from "../config/env.js"
 
 const resend = new Resend(env.EMAIL.RESEND_API_KEY)
 
-export async function sendPasswordResetEmail({
-  to,
-  resetUrl,
-}: {
-  to: string
-  resetUrl: string
-}) {
+export async function sendPasswordResetEmail({ to, resetUrl }: { to: string; resetUrl: string }) {
   void resend.emails.send({
     from: env.EMAIL.FROM,
     to,

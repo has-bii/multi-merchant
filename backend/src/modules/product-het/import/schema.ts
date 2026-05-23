@@ -7,10 +7,7 @@ export const importPreviewSchema = z.object({
   file: z
     .file()
     .refine((f) => f.size <= MAX_FILE_SIZE, "Ukuran file maksimal 5MB")
-    .refine(
-      (f) => ACCEPTED_FORMATS.includes(f.type),
-      "Format file harus .csv",
-    ),
+    .refine((f) => ACCEPTED_FORMATS.includes(f.type), "Format file harus .csv"),
 })
 
 export const importPreviewRowSchema = z.object({

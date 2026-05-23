@@ -1,8 +1,8 @@
-import { UserService } from "./service.js"
 import { createApp } from "../../lib/typed-app.js"
 import { requireAdmin } from "../../middlewares/auth.js"
 import { zValidator } from "../../middlewares/validator.js"
 import { getUserQuerySchema } from "./schema.js"
+import { UserService } from "./service.js"
 
 export const crudRoute = createApp()
   .get("/", requireAdmin, zValidator("query", getUserQuerySchema), async (c) => {

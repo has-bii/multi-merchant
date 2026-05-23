@@ -1,8 +1,8 @@
-import { ProductHetService } from "./service.js"
 import { createApp } from "../../lib/typed-app.js"
 import { requireAdmin, requireAuth } from "../../middlewares/auth.js"
 import { zValidator } from "../../middlewares/validator.js"
 import { bulkDeleteSchema, getProductHetQuerySchema, productHetSchema } from "./schema.js"
+import { ProductHetService } from "./service.js"
 
 export const crudRoute = createApp()
   .get("/", requireAuth, zValidator("query", getProductHetQuerySchema), async (c) => {

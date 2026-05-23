@@ -1,8 +1,8 @@
-import { MerchantService } from "./service.js"
 import { createApp } from "../../lib/typed-app.js"
 import { requireAdmin, requireAuth, requireUser } from "../../middlewares/auth.js"
 import { zValidator } from "../../middlewares/validator.js"
 import { getMerchantQuerySchema, merchantSchema } from "./schema.js"
+import { MerchantService } from "./service.js"
 
 export const crudRoute = createApp()
   .get("/", requireAdmin, zValidator("query", getMerchantQuerySchema), async (c) => {
