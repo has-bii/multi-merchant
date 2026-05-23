@@ -6,6 +6,7 @@ import { useListState } from "@/hooks/use-list-state"
 
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate, useSearch } from "@tanstack/react-router"
+import type { MerchantListItem } from "backend/merchant"
 
 export function MerchantListContent() {
   const searchParams = useSearch({ from: "/_authenticated/admin/merchant/" })
@@ -33,7 +34,7 @@ export function MerchantListContent() {
 
   return (
     <div className="space-y-4">
-      <MerchantTable data={data.data} searchParams={params} onSortChange={toggleSort} />
+      <MerchantTable data={data.data as unknown as MerchantListItem[]} searchParams={params} onSortChange={toggleSort} />
 
       <DataTablePagination
         page={data.pagination.page}

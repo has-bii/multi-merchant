@@ -19,7 +19,7 @@ export const updateProductSchema = z.object({
 
 export const getProductQuerySchema = querySchema.extend({
   name: z.string().optional(),
-  productHetId: z.string().uuid().optional(),
+  productHetId: z.uuid().optional(),
   orderBy: z.enum(["createdAt", "price"]).default("createdAt"),
   order: z.enum(["asc", "desc"]).default("desc"),
 })

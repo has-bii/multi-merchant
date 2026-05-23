@@ -4,7 +4,8 @@
   "exports": {
     "./product-het": "./src/modules/product-het/index.ts",
     "./user": "./src/modules/user/index.ts",
-    "./merchant": "./src/modules/merchant/index.ts"
+    "./merchant": "./src/modules/merchant/index.ts",
+    "./product": "./src/modules/product/index.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.8.0",

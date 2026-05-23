@@ -1,4 +1,4 @@
-import { Header, HeaderCenter, HeaderLeft, HeaderRight } from "@/components/header"
+import { Header, HeaderCenter, HeaderLeft } from "@/components/header"
 import { MainPage, MainPageContent } from "@/components/main-page"
 import {
   Sidebar,

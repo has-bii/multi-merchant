@@ -25,7 +25,7 @@ export function getUserQueryOptions(params: UserSearch) {
         },
       })
       if (!res.ok) throw new Error("Gagal memuat data pengguna")
-      return (await res.json()) as UserListResponse
+      return (await res.json()) as unknown as UserListResponse
     },
   })
 }

@@ -37,7 +37,7 @@ export function getProductHetQueryOptions(params: ProductHetSearch) {
         },
       })
       if (!res.ok) throw new Error("Gagal memuat data produk HET")
-      return (await res.json()) as ProductHetListResponse
+      return (await res.json()) as unknown as ProductHetListResponse
     },
   })
 }

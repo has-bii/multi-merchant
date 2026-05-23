@@ -20,8 +20,6 @@ export const Route = createFileRoute("/_authenticated/user/merchant")({
 function RouteComponent() {
   const { data } = useSuspenseQuery(getMerchantByUserQueryOptions())
 
-  const merchant = data!
-
   return (
     <MainPage>
       <Header>

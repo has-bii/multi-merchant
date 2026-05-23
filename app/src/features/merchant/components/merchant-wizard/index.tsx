@@ -22,7 +22,7 @@ export function MerchantCreationWizard() {
   const handleConfirm = async () => {
     setError(null)
     try {
-      await createMutation.mutateAsync(wizard.formData)
+      await createMutation.mutateAsync(wizard.formData as MerchantFormValues)
       wizard.nextStep()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal membuat merchant")
@@ -79,7 +79,7 @@ export function MerchantCreationWizard() {
           )}
           {wizard.step === "preview" && (
             <StepPreview
-              data={wizard.formData}
+              data={wizard.formData as MerchantFormValues}
               onConfirm={handleConfirm}
               onPrev={wizard.prevStep}
               isPending={createMutation.isPending}
